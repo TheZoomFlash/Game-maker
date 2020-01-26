@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Scenes/Examples/Scene_Biome_Basic.unity
-  isLoaded: 1
-  isActive: 1

@@ -135,7 +135,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
 
         m_Filter = new ContactFilter2D();
-        m_Filter.layerMask = m_CharacterController2D.groundedLayerMask;
+        m_Filter.layerMask = m_CharacterController2D.m_layerMask;
         m_Filter.useLayerMask = true;
         m_Filter.useTriggers = false;
 
@@ -180,7 +180,7 @@ public class EnemyBehaviour : MonoBehaviour
         Vector3 castingPosition = (Vector2)(transform.position + m_LocalBounds.center) + m_SpriteForward * m_LocalBounds.extents.x;
         Debug.DrawLine(castingPosition, castingPosition + Vector3.down * (m_LocalBounds.extents.y + 0.2f));
 
-        if (!Physics2D.CircleCast(castingPosition, 0.1f, Vector2.down, m_LocalBounds.extents.y + 0.2f, m_CharacterController2D.groundedLayerMask.value))
+        if (!Physics2D.CircleCast(castingPosition, 0.1f, Vector2.down, m_LocalBounds.extents.y + 0.2f, m_CharacterController2D.m_layerMask.value))
         {
             return true;
         }
