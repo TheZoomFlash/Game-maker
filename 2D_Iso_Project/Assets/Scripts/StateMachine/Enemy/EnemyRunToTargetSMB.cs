@@ -15,7 +15,7 @@ public class EnemyRunToTargetSMB : SceneLinkedSMB<EnemyBehaviour>
         m_MonoBehaviour.CheckTargetStillVisible();
         m_MonoBehaviour.CheckMeleeAttack();
 
-        float amount = m_MonoBehaviour.m_body.moveSpeed * 2.0f;
+        float amount = m_MonoBehaviour.speed * 2.0f;
         if (m_MonoBehaviour.CheckForObstacle(amount))
         {
             m_MonoBehaviour.ForgetTarget();

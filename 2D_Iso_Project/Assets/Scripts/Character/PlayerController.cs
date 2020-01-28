@@ -7,19 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     static public PlayerController PlayerInstance { get; private set; }
 
-    // script
-    CharacterController2D m_body;
-    Damager damager;
-    Damageable damageable;
-
-
     //****************** animator
     Animator animator;
-    protected readonly int hash_xDir = Animator.StringToHash("xDir");
-    protected readonly int hash_yDir = Animator.StringToHash("yDir");
-    protected readonly int hash_speed = Animator.StringToHash("speed");
-    protected readonly int hash_attack = Animator.StringToHash("meleeAttack");
-    protected readonly int hash_hit = Animator.StringToHash("hit");
 
 
     //****************** Audio
@@ -28,6 +17,11 @@ public class PlayerController : MonoBehaviour
     public AudioClip hitClip;
     AudioSource audioSource;
 
+
+    // script
+    CharacterController2D m_body;
+    Damager damager;
+    Damageable damageable;
 
     void Awake()
     {
@@ -44,49 +38,44 @@ public class PlayerController : MonoBehaviour
         SceneLinkedSMB<PlayerController>.Initialise(animator, this);
     }
 
-
     void FixedUpdate()
     {
-        ProcessInput();
+        MoveUpdate();
         AnimationUpdate();
+        CheckAttack();
     }
 
-    void ProcessInput()
+
+    void MoveUpdate()
     {
-        float horizontal = PlayerInput.Instance.Horizontal.Value;
-        float Vertical = PlayerInput.Instance.Vertical.Value;
+        float horizontal = Input.GetAxis("Horizontal");
+        float Vertical = Input.GetAxis("Vertical");
         Vector2 movement = new Vector2(horizontal, Vertical);
-        MoveUpdate(movement);
-    }
-
-    void MoveUpdate(Vector2 movement)
-    {
         m_body.Move(movement);
     }
 
+
     void AnimationUpdate()
     {
-        animator.SetFloat(hash_xDir, m_body.faceDir.x);
-        animator.SetFloat(hash_yDir, m_body.faceDir.y);
-        animator.SetFloat(hash_speed, m_body.velocity);
+        animator.SetFloat("xDir", m_body.faceDir.x);
+        animator.SetFloat("yDir", m_body.faceDir.y);
+        animator.SetFloat("speed", m_body.velocity);
     }
 
-
-    public void CheckForMeleeAttack()
+    void CheckAttack()
     {
-        if(PlayerInput.Instance.MeleeAttack.Down && damager.IsCanDamage)
+        if (Input.GetMouseButtonDown(0))
         {
-            animator.SetTrigger(hash_attack);
+            AttemptAttack();
         }
     }
 
-    public void MeleeAttack()
+    void AttemptAttack()
     {
         Vector2 mousePos = CameraController.Instance.GameplayCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = (mousePos - (Vector2)m_body.position).normalized;
         damager.Attack(dir);
     }
-
 
 
 

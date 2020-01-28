@@ -21,6 +21,8 @@ public class CameraController : MonoBehaviour
         Instance = this;
         startingPosition = transform.position;
         GameplayCamera = GetComponent<Camera>();
+
+        Application.targetFrameRate = 60;
     }
 
 	void Update () 
