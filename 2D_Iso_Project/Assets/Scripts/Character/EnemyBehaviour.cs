@@ -14,10 +14,18 @@ public class EnemyBehaviour : MonoBehaviour
     static Collider2D[] s_ColliderCache = new Collider2D[16];
     public Transform Target { get { return m_Target; } }
 
+    [Tooltip("If the sprite face left on the spritesheet, enable this. Otherwise, leave disabled")]
+    public bool spriteFaceLeft = false;
+
     //[Header("References")]
     //[Tooltip("If the enemy will be using ranged attack, set a prefab of the projectile it should use")]
     //public Bullet projectilePrefab;
     //protected BulletPool m_BulletPool;
+
+
+    [Header("Movement")]
+    public float speed;
+    //public float gravity = 10.0f;
 
     [Header("Scanning settings")]
     [Tooltip("The angle of the forward of the view cone. 0 is forward of the sprite, 90 is up, 180 behind etc.")]
@@ -42,34 +50,43 @@ public class EnemyBehaviour : MonoBehaviour
     [Header("Range Attack Data")]
     [Tooltip("From where the projectile are spawned")]
     public Transform shootingOrigin;
-    protected Vector3 m_TargetShootPosition;
+
+    [Header("Audio")]
+    public RandomAudioPlayer shootingAudio;
+    public RandomAudioPlayer meleeAttackAudio;
+    public RandomAudioPlayer dieAudio;
+    public RandomAudioPlayer footStepAudio;
 
     [Header("Misc")]
     [Tooltip("Time in seconds during which the enemy flicker after being hit")]
     public float flickeringDuration;
-    protected Coroutine m_FlickeringCoroutine = null;
-    protected Color m_OriginalColor;
 
     protected SpriteRenderer m_SpriteRenderer;
-    public CharacterController2D m_body;
+    protected CharacterController2D m_CharacterController2D;
     protected Collider2D m_Collider;
-    
-    public Vector3 moveVector { get { return m_MoveVector; } }
+    protected Animator m_Animator;
+
+     public Vector3 moveVector { get { return m_MoveVector; } }
     protected Vector3 m_MoveVector;
     protected Transform m_Target;
-    
+    protected Vector3 m_TargetShootPosition;
     protected float m_TimeSinceLastTargetView;
+
     protected float m_FireTimer = 0.0f;
 
     //as we flip the sprite instead of rotating/scaling the object, this give the forward vector according to the sprite orientation
     protected Vector2 m_SpriteForward;
     protected Bounds m_LocalBounds;
+    protected Vector3 m_LocalDamagerPosition;
+
     protected RaycastHit2D[] m_RaycastHitCache = new RaycastHit2D[8];
+    protected ContactFilter2D m_Filter;
+
+    protected Coroutine m_FlickeringCoroutine = null;
+    protected Color m_OriginalColor;
 
     protected bool m_Dead = false;
 
-    //****************** animator
-    protected Animator m_Animator;
     protected readonly int m_HashSpottedPara = Animator.StringToHash("Spotted");
     protected readonly int m_HashShootingPara = Animator.StringToHash("Shooting");
     protected readonly int m_HashTargetLostPara = Animator.StringToHash("TargetLost");
@@ -78,21 +95,17 @@ public class EnemyBehaviour : MonoBehaviour
     protected readonly int m_HashDeathPara = Animator.StringToHash("Death");
     protected readonly int m_HashGroundedPara = Animator.StringToHash("Grounded");
 
-    //****************** Audio
-    [Header("Audio")]
-    public RandomAudioPlayer shootingAudio;
-    public RandomAudioPlayer meleeAttackAudio;
-    public RandomAudioPlayer dieAudio;
-    public RandomAudioPlayer footStepAudio;
-
     private void Awake()
     {
-        m_body = GetComponent<CharacterController2D>();
+        m_CharacterController2D = GetComponent<CharacterController2D>();
         m_Collider = GetComponent<Collider2D>();
         m_Animator = GetComponent<Animator>();
         m_SpriteRenderer = GetComponent<SpriteRenderer>();
 
         m_OriginalColor = m_SpriteRenderer.color;
+
+        m_SpriteForward = spriteFaceLeft ? Vector2.left : Vector2.right;
+        if (m_SpriteRenderer.flipX) m_SpriteForward = -m_SpriteForward;
 
         if (meleeDamager != null)
             EndAttack();
@@ -115,11 +128,19 @@ public class EnemyBehaviour : MonoBehaviour
         SceneLinkedSMB<EnemyBehaviour>.Initialise(m_Animator, this);
 
         m_LocalBounds = new Bounds();
-        int count = m_body.Rigidbody2D.GetAttachedColliders(s_ColliderCache);
+        int count = m_CharacterController2D.Rigidbody2D.GetAttachedColliders(s_ColliderCache);
         for (int i = 0; i < count; ++i)
         {
             m_LocalBounds.Encapsulate(transform.InverseTransformBounds(s_ColliderCache[i].bounds));
         }
+
+        m_Filter = new ContactFilter2D();
+        m_Filter.layerMask = m_CharacterController2D.m_layerMask;
+        m_Filter.useLayerMask = true;
+        m_Filter.useTriggers = false;
+
+        if (meleeDamager)
+            m_LocalDamagerPosition = meleeDamager.transform.localPosition;
     }
 
     void FixedUpdate()
@@ -127,11 +148,11 @@ public class EnemyBehaviour : MonoBehaviour
         if (m_Dead)
             return;
 
-        m_body.Move(m_MoveVector * Time.deltaTime);
+        m_CharacterController2D.Move(m_MoveVector * Time.deltaTime);
 
         UpdateTimers();
 
-        //m_Animator.SetBool(m_HashGroundedPara, m_body.IsGrounded);
+        //m_Animator.SetBool(m_HashGroundedPara, m_CharacterController2D.IsGrounded);
     }
 
     void UpdateTimers()
@@ -151,7 +172,7 @@ public class EnemyBehaviour : MonoBehaviour
     public bool CheckForObstacle(float forwardDistance)
     {
         //we circle cast with a size sligly small than the collider height. That avoid to collide with very small bump on the ground
-        if (Physics2D.CircleCast(m_Collider.bounds.center, m_Collider.bounds.extents.y - 0.2f, m_SpriteForward, forwardDistance, m_body.m_ContactFilter.layerMask.value))
+        if (Physics2D.CircleCast(m_Collider.bounds.center, m_Collider.bounds.extents.y - 0.2f, m_SpriteForward, forwardDistance, m_Filter.layerMask.value))
         {
             return true;
         }
@@ -159,7 +180,7 @@ public class EnemyBehaviour : MonoBehaviour
         Vector3 castingPosition = (Vector2)(transform.position + m_LocalBounds.center) + m_SpriteForward * m_LocalBounds.extents.x;
         Debug.DrawLine(castingPosition, castingPosition + Vector3.down * (m_LocalBounds.extents.y + 0.2f));
 
-        if (!Physics2D.CircleCast(castingPosition, 0.1f, Vector2.down, m_LocalBounds.extents.y + 0.2f, m_body.m_layerMask.value))
+        if (!Physics2D.CircleCast(castingPosition, 0.1f, Vector2.down, m_LocalBounds.extents.y + 0.2f, m_CharacterController2D.m_layerMask.value))
         {
             return true;
         }
@@ -169,7 +190,16 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void SetFacingData(int facing)
     {
-        //TODO in characterController
+        if (facing == -1)
+        {
+            m_SpriteRenderer.flipX = !spriteFaceLeft;
+            m_SpriteForward = spriteFaceLeft ? Vector2.right : Vector2.left;
+        }
+        else if (facing == 1)
+        {
+            m_SpriteRenderer.flipX = spriteFaceLeft;
+            m_SpriteForward = spriteFaceLeft ? Vector2.left : Vector2.right;
+        }
     }
 
     public void SetMoveVector(Vector2 newMoveVector)
@@ -179,7 +209,17 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void UpdateFacing()
     {
-        //TODO in characterController
+        bool faceLeft = m_MoveVector.x < 0f;
+        bool faceRight = m_MoveVector.x > 0f;
+
+        if (faceLeft)
+        {
+            SetFacingData(-1);
+        }
+        else if (faceRight)
+        {
+            SetFacingData(1);
+        }
     }
 
     public void ScanForPlayer()
@@ -195,7 +235,7 @@ public class EnemyBehaviour : MonoBehaviour
             return;
         }
 
-        Vector3 testForward = Quaternion.Euler(0, 0, true ? Mathf.Sign(m_SpriteForward.x) * -viewDirection : Mathf.Sign(m_SpriteForward.x) * viewDirection) * m_SpriteForward;
+        Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? Mathf.Sign(m_SpriteForward.x) * -viewDirection : Mathf.Sign(m_SpriteForward.x) * viewDirection) * m_SpriteForward;
 
         float angle = Vector3.Angle(testForward, dir);
 
@@ -232,7 +272,7 @@ public class EnemyBehaviour : MonoBehaviour
 
         if (toTarget.sqrMagnitude < viewDistance * viewDistance)
         {
-            Vector3 testForward = Quaternion.Euler(0, 0, true ? -viewDirection : viewDirection) * m_SpriteForward;
+            Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * m_SpriteForward;
             if (m_SpriteRenderer.flipX) testForward.x = -testForward.x;
 
             float angle = Vector3.Angle(testForward, toTarget);
@@ -285,6 +325,11 @@ public class EnemyBehaviour : MonoBehaviour
     //This is called when the Damager get enabled (so the enemy can damage the player). Likely be called by the animation throught animation event (see the attack animation of the Chomper)
     public void StartAttack()
     {
+        if (m_SpriteRenderer.flipX)
+            meleeDamager.transform.localPosition = Vector3.Scale(m_LocalDamagerPosition, new Vector3(-1, 1, 1));
+        else
+            meleeDamager.transform.localPosition = m_LocalDamagerPosition;
+
         meleeDamager.EnableDamage();
         meleeDamager.gameObject.SetActive(true);
 
@@ -323,6 +368,11 @@ public class EnemyBehaviour : MonoBehaviour
     public void Shooting()
     {
         Vector2 shootPosition = shootingOrigin.transform.localPosition;
+
+        //if we are flipped compared to normal, we need to localy flip the shootposition too
+        if ((spriteFaceLeft && m_SpriteForward.x > 0) || (!spriteFaceLeft && m_SpriteForward.x > 0))
+            shootPosition.x *= -1;
+
         shootingAudio.PlayRandomSound();
 
         //BulletObject obj = m_BulletPool.Pop(shootingOrigin.TransformPoint(shootPosition));
@@ -476,7 +526,6 @@ public class EnemyBehaviour : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         //draw the cone of view
-        bool spriteFaceLeft = true;
         Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
         forward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * forward;
 
