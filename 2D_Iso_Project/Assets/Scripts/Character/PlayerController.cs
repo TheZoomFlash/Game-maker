@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     static public PlayerController PlayerInstance { get; private set; }
 
+    public Camera m_camera;
     // script
     CharacterController2D m_body;
     Damager damager;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
         m_body = GetComponent<CharacterController2D>();
         damager = GetComponent<Damager>();
         damageable = GetComponent<Damageable>();
+        m_camera = FindObjectOfType<Camera>();
     }
 
     void Start()
@@ -82,7 +84,7 @@ public class PlayerController : MonoBehaviour
 
     public void MeleeAttack()
     {
-        Vector2 mousePos = CameraController.Instance.GameplayCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = (mousePos - (Vector2)m_body.position).normalized;
         damager.Attack(dir);
     }
