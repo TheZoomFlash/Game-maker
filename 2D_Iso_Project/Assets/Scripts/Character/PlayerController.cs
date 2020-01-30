@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
     static public PlayerController PlayerInstance { get; private set; }
 
     public Camera m_camera;
-    // script
+
+    //****************** script
     CharacterController2D m_body;
     Damager damager;
     Damageable damageable;
@@ -21,6 +22,21 @@ public class PlayerController : MonoBehaviour
     protected readonly int hash_speed = Animator.StringToHash("speed");
     protected readonly int hash_attack = Animator.StringToHash("meleeAttack");
     protected readonly int hash_hit = Animator.StringToHash("hit");
+
+
+    //****************** meleeAttack
+    private int attackIndex = 0;
+    public void ResetAttack() => animator.SetInteger(hash_attack, 0);
+    private const int Attack_Sequence = 4;
+    private const float Press_Delay = 0.8f;
+    private bool attack_pressDown = false;
+    IEnumerator DisPressAfterDelay()
+    {
+        yield return new WaitForSeconds(Press_Delay);
+        attack_pressDown = false;
+        attackIndex = 0;
+    }
+
 
 
     //****************** Audio
@@ -59,6 +75,13 @@ public class PlayerController : MonoBehaviour
         float Vertical = PlayerInput.Instance.Vertical.Value;
         Vector2 movement = new Vector2(horizontal, Vertical);
         MoveUpdate(movement);
+
+        if(PlayerInput.Instance.MeleeAttack.Down)
+        {
+            attack_pressDown = true;
+            StopCoroutine("DisPressAfterDelay");
+            StartCoroutine("DisPressAfterDelay");
+        }
     }
 
     void MoveUpdate(Vector2 movement)
@@ -76,9 +99,11 @@ public class PlayerController : MonoBehaviour
 
     public void CheckForMeleeAttack()
     {
-        if(PlayerInput.Instance.MeleeAttack.Down && damager.IsCanDamage)
+        if(attack_pressDown && damager.IsCanDamage)
         {
-            animator.SetTrigger(hash_attack);
+            attackIndex = attackIndex % Attack_Sequence + 1;
+            animator.SetInteger(hash_attack, attackIndex);
+            //Debug.Log("attackIndex :" + attackIndex);
         }
     }
 

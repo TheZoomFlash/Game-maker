@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class MeleeAttackSMB : SceneLinkedSMB<PlayerController>
 {
+    public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        m_MonoBehaviour.ResetAttack();
+    }
+    
     public override void OnSLStatePostEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_MonoBehaviour.MeleeAttack();

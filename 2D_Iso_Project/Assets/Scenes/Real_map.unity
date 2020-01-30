@@ -234,6 +234,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5225122527254928787, guid: e66074878f16c264cbc0f642516fa498,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4a37b230cfc05a840a2c94d73f26bbe6,
+        type: 3}
+    - target: {fileID: 5225122528538493161, guid: e66074878f16c264cbc0f642516fa498,
+        type: 3}
+      propertyPath: damageRate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7411629339577067242, guid: e66074878f16c264cbc0f642516fa498,
         type: 3}
       propertyPath: m_LocalPosition.x
