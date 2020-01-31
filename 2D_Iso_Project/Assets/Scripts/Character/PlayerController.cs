@@ -6,7 +6,6 @@ using Gamekit2D;
 public class PlayerController : MonoBehaviour
 {
     static public PlayerController PlayerInstance { get; private set; }
-
     public Camera m_camera;
 
     //****************** script
@@ -27,13 +26,16 @@ public class PlayerController : MonoBehaviour
     //****************** move
     public void DisMovable() => m_body.DisableMove();
     public void EnMovable() => m_body.EnableMove();
+    public float attackMoveDis = 0.3f;
+    public void AttackMove() => m_body.ForceMove(m_body.FaceDir * attackMoveDis * Mathf.Sqrt(attackIndex));
+
 
     //****************** meleeAttack
     private int attackIndex = 0;
-    public void ResetAttack() => animator.SetInteger(hash_attack, 0);
     private const int Attack_Sequence = 4;
     private const float Press_Delay = 0.5f;
     private bool attack_pressDown = false;
+    public void ResetAttack() => animator.SetInteger(hash_attack, 0);
     IEnumerator DisPressAfterDelay()
     {
         yield return new WaitForSeconds(Press_Delay);
@@ -43,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    //****************** Audio
+    //****************** Audios
     [Header("Audio settings")]
     public AudioClip attackClip;
     public AudioClip hitClip;
@@ -99,9 +101,9 @@ public class PlayerController : MonoBehaviour
 
     void AnimationUpdate()
     {
-        animator.SetFloat(hash_xDir, m_body.faceDir.x);
-        animator.SetFloat(hash_yDir, m_body.faceDir.y);
-        animator.SetFloat(hash_velocity, m_body.velocity);
+        animator.SetFloat(hash_xDir, m_body.FaceDir.x);
+        animator.SetFloat(hash_yDir, m_body.FaceDir.y);
+        animator.SetFloat(hash_velocity, m_body.Velocity);
     }
 
 
@@ -118,7 +120,7 @@ public class PlayerController : MonoBehaviour
     public void MeleeAttack()
     {
         Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 dir = (mousePos - (Vector2)m_body.position).normalized;
+        Vector2 dir = (mousePos - (Vector2)m_body.Position).normalized;
         damager.Attack(dir);
     }
 
@@ -130,10 +132,6 @@ public class PlayerController : MonoBehaviour
         audioSource.PlayOneShot(clip);
     }
 
-    public void SetChekpoint(Checkpoint checkpoint)
-    {
-        //m_LastCheckpoint = checkpoint;
-    }
 
 
 
@@ -144,6 +142,11 @@ public class PlayerController : MonoBehaviour
 
 
 
+
+    //public void SetChekpoint(Checkpoint checkpoint)
+    //{
+    //    m_LastCheckpoint = checkpoint;
+    //}
 
     //public void SetDirection(Vector2 direction)
     //{

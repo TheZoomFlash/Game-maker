@@ -19,7 +19,7 @@ namespace Gamekit2D
             PlayerController c = collision.GetComponent<PlayerController>();
             if(c != null)
             {
-                c.SetChekpoint(this);
+                //c.SetChekpoint(this);
             }
         }
     }

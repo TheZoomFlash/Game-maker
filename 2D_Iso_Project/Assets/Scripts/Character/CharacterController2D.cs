@@ -11,17 +11,17 @@ public class CharacterController2D : MonoBehaviour
     public float dashSpeed = 10f;
     public float dashDuration = 0.2f;
     public float dashInterval = 1f;
-    private bool canDash = true;
-    private bool isDashing = false;
+    protected bool canDash = true;
+    protected bool isDashing = false;
 
     public Rigidbody2D Rigidbody2D { get; protected set; }
-    public Vector2 position { get { return Rigidbody2D.position; } }
-    public float velocity { get; protected set; }
-    public Vector2 faceDir { get; protected set; }
+    public Vector2 Position { get { return Rigidbody2D.position; } }
+    public float Velocity { get; protected set; }
+    public Vector2 FaceDir { get; protected set; }
 
-    Vector2 m_PreviousPosition;
-    Vector2 m_CurrentPosition;
-    Vector2 m_NextMovement;
+    protected Vector2 m_PreviousPosition;
+    protected Vector2 m_CurrentPosition;
+    protected Vector2 m_NextMovement;
 
     public bool isMovable = true;
     public void EnableMove() => isMovable = true;
@@ -30,6 +30,13 @@ public class CharacterController2D : MonoBehaviour
     public LayerMask m_layerMask;
     public ContactFilter2D m_ContactFilter;
     //CapsuleCollider2D m_Capsule;
+
+    void Init()
+    {
+        Velocity = 0;
+        FaceDir = new Vector2(0, -1);
+        m_NextMovement = Vector2.zero;
+    }
 
     void Awake()
     {
@@ -41,6 +48,8 @@ public class CharacterController2D : MonoBehaviour
         m_ContactFilter.useTriggers = false;
 
         Physics2D.queriesStartInColliders = false;
+
+        Init();
     }
 
     void FixedUpdate()
@@ -64,7 +73,12 @@ public class CharacterController2D : MonoBehaviour
         DirUpdate(movement);
         SpeedUpdate(movement);
 
-        m_NextMovement = faceDir * velocity * Time.deltaTime;
+        m_NextMovement = FaceDir * Velocity * Time.deltaTime;
+    }
+
+    public void ForceMove(Vector2 movement)
+    {
+        m_NextMovement = movement;
     }
 
     public void Dash()
@@ -94,17 +108,17 @@ public class CharacterController2D : MonoBehaviour
     {
         if (!Mathf.Approximately(dir.x, 0.0f) || !Mathf.Approximately(dir.y, 0.0f))
         {
-            faceDir = dir.normalized;
+            FaceDir = dir.normalized;
         }
     }
 
     void SpeedUpdate(Vector2 movement)
     {
-        velocity = Mathf.Clamp(movement.magnitude, 0, 1);
+        Velocity = Mathf.Clamp(movement.magnitude, 0, 1);
         if (isDashing)
-            velocity = dashSpeed;
+            Velocity = dashSpeed;
         else
-            velocity *= moveSpeed;
+            Velocity *= moveSpeed;
     }
 
     /// <summary>

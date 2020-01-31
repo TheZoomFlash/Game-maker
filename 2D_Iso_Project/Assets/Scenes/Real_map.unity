@@ -234,6 +234,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5225122527157751479, guid: e66074878f16c264cbc0f642516fa498,
+        type: 3}
+      propertyPath: attackMoveDis
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 5225122527254928787, guid: e66074878f16c264cbc0f642516fa498,
         type: 3}
       propertyPath: m_Sprite
