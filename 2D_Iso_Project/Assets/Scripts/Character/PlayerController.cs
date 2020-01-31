@@ -19,16 +19,20 @@ public class PlayerController : MonoBehaviour
     Animator animator;
     protected readonly int hash_xDir = Animator.StringToHash("xDir");
     protected readonly int hash_yDir = Animator.StringToHash("yDir");
-    protected readonly int hash_speed = Animator.StringToHash("speed");
+    protected readonly int hash_velocity = Animator.StringToHash("velocity");
     protected readonly int hash_attack = Animator.StringToHash("meleeAttack");
     protected readonly int hash_hit = Animator.StringToHash("hit");
 
+
+    //****************** move
+    public void DisMovable() => m_body.DisableMove();
+    public void EnMovable() => m_body.EnableMove();
 
     //****************** meleeAttack
     private int attackIndex = 0;
     public void ResetAttack() => animator.SetInteger(hash_attack, 0);
     private const int Attack_Sequence = 4;
-    private const float Press_Delay = 0.8f;
+    private const float Press_Delay = 0.5f;
     private bool attack_pressDown = false;
     IEnumerator DisPressAfterDelay()
     {
@@ -74,9 +78,13 @@ public class PlayerController : MonoBehaviour
         float horizontal = PlayerInput.Instance.Horizontal.Value;
         float Vertical = PlayerInput.Instance.Vertical.Value;
         Vector2 movement = new Vector2(horizontal, Vertical);
+        if(PlayerInput.Instance.Jump.Down)
+        {
+            m_body.Dash();
+        }
         MoveUpdate(movement);
 
-        if(PlayerInput.Instance.MeleeAttack.Down)
+        if (PlayerInput.Instance.MeleeAttack.Down)
         {
             attack_pressDown = true;
             StopCoroutine("DisPressAfterDelay");
@@ -93,7 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetFloat(hash_xDir, m_body.faceDir.x);
         animator.SetFloat(hash_yDir, m_body.faceDir.y);
-        animator.SetFloat(hash_speed, m_body.velocity);
+        animator.SetFloat(hash_velocity, m_body.velocity);
     }
 
 
