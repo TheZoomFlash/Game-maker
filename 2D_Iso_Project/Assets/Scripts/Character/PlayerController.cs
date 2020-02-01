@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     static public PlayerController PlayerInstance { get; private set; }
-    public Camera m_camera;
 
     //****************** script
     CharacterController2D m_body;
@@ -88,8 +87,8 @@ public class PlayerController : MonoBehaviour
         if (PlayerInput.Instance.MeleeAttack.Down)
         {
             attack_pressDown = true;
-            StopCoroutine(DisPressAfterDelay());
-            StartCoroutine(DisPressAfterDelay());
+            StopCoroutine("DisPressAfterDelay");
+            StartCoroutine("DisPressAfterDelay");
         }
     }
 
@@ -120,6 +119,7 @@ public class PlayerController : MonoBehaviour
         m_body.ForceMove(dir * attackMoveDis * Mathf.Sqrt(2 * attackIndex));
 
         m_shaker.Shake();
+        //FindObjectOfType<CameraShaker>().Shake();
         //FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }
 
