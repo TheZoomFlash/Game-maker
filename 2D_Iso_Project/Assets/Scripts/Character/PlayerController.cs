@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     CharacterController2D m_body;
     Damager damager;
     Damageable damageable;
+    CameraShaker m_shaker;
 
 
     //****************** animator
@@ -27,7 +28,6 @@ public class PlayerController : MonoBehaviour
     public void DisMovable() => m_body.DisableMove();
     public void EnMovable() => m_body.EnableMove();
     public float attackMoveDis = 0.3f;
-    public void AttackMove() => m_body.ForceMove(m_body.FaceDir * attackMoveDis * Mathf.Sqrt(attackIndex));
 
 
     //****************** meleeAttack
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
         m_body = GetComponent<CharacterController2D>();
         damager = GetComponent<Damager>();
         damageable = GetComponent<Damageable>();
-        m_camera = FindObjectOfType<Camera>();
+        m_shaker = Camera.main.GetComponent<CameraShaker>();
     }
 
     void Start()
@@ -84,19 +84,14 @@ public class PlayerController : MonoBehaviour
         {
             m_body.Dash();
         }
-        MoveUpdate(movement);
+        m_body.Move(movement);
 
         if (PlayerInput.Instance.MeleeAttack.Down)
         {
             attack_pressDown = true;
-            StopCoroutine("DisPressAfterDelay");
-            StartCoroutine("DisPressAfterDelay");
+            StopCoroutine(DisPressAfterDelay());
+            StartCoroutine(DisPressAfterDelay());
         }
-    }
-
-    void MoveUpdate(Vector2 movement)
-    {
-        m_body.Move(movement);
     }
 
     void AnimationUpdate()
@@ -119,9 +114,14 @@ public class PlayerController : MonoBehaviour
 
     public void MeleeAttack()
     {
-        Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = (mousePos - (Vector2)m_body.Position).normalized;
         damager.Attack(dir);
+
+        m_body.ForceMove(dir * attackMoveDis * Mathf.Sqrt(2 * attackIndex));
+
+        m_shaker.Shake();
+        //FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }
 
 

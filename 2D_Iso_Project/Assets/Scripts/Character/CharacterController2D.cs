@@ -13,6 +13,7 @@ public class CharacterController2D : MonoBehaviour
     public float dashInterval = 1f;
     protected bool canDash = true;
     protected bool isDashing = false;
+    GhostTrail ghostTrail;
 
     public Rigidbody2D Rigidbody2D { get; protected set; }
     public Vector2 Position { get { return Rigidbody2D.position; } }
@@ -41,7 +42,7 @@ public class CharacterController2D : MonoBehaviour
     void Awake()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
-        //m_Capsule = GetComponent<CapsuleCollider2D>();
+        ghostTrail = GetComponentInChildren<GhostTrail>();
 
         m_ContactFilter.layerMask = m_layerMask;
         m_ContactFilter.useLayerMask = true;
@@ -88,8 +89,9 @@ public class CharacterController2D : MonoBehaviour
 
         canDash = false;
         isDashing = true;
-        StartCoroutine("StopDash");
-        StartCoroutine("CanDash");
+        StartCoroutine(StopDash());
+        StartCoroutine(CanDash());
+        ghostTrail.ShowGhost();
     }
 
     IEnumerator StopDash()
