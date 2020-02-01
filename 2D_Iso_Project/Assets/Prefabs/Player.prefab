@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 5225122527254928787}
   - component: {fileID: 5225122527254928784}
   - component: {fileID: 4260007050483990166}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Witch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -541,7 +541,7 @@ MonoBehaviour:
   canHitTriggers: 0
   hittableLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 4195328
   ignoreInvincibility: 0
   OnDamageableHit:
     m_PersistentCalls:

@@ -125,6 +125,18 @@ public class PlayerController : MonoBehaviour
 
 
 
+    public bool GetHealth(int healthAmount)
+    {
+        return true;
+        if (damageable.NeedHealth)
+        {
+            damageable.GainHealth(healthAmount);
+            return true;
+        }
+        else
+            return false;
+    }
+
 
     public void PlaySource(AudioClip clip)
     {

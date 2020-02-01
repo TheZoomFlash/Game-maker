@@ -152,7 +152,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: e0df95e8ce8172145afb5967040ac7c5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 240052b21634caf43a960e75674a5395, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -194,11 +194,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f2661bc6796d0242b9f3bc49dfb2845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 5
+  maxHealeh: 5
   invulnerableAfterDamage: 1
   invulnerabilityDuration: 3
-  disableOnDeath: 0
   centreOffset: {x: 0, y: 1}
+  disableOnDeath: 0
   OnHealthSet:
     m_PersistentCalls:
       m_Calls: []

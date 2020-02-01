@@ -19,6 +19,8 @@ public class Damageable : MonoBehaviour
     public int maxHealeh = 5;
     protected int m_CurrentHealth;
     public int CurrentHealth { get { return m_CurrentHealth; } }
+    public bool NeedHealth => m_CurrentHealth < maxHealeh;
+
     protected Vector2 m_DamageDirection;
     public Vector2 DamageDirection { get { return m_DamageDirection; } }
 
@@ -78,10 +80,11 @@ public class Damageable : MonoBehaviour
 
         m_DamageDirection = transform.position + (Vector3)centreOffset - Damager.transform.position;
 
-        OnTakeDamage.Invoke(Damager, this);
+        if(m_CurrentHealth > 0)
+            OnTakeDamage.Invoke(Damager, this);
     }
 
-    public void SetHealth(int amount)
+    private void SetHealth(int amount)
     {
         m_CurrentHealth = Mathf.Clamp(amount, 0, maxHealeh);
         OnHealthSet.Invoke(this);

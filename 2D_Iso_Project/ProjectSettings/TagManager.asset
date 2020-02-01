@@ -14,12 +14,20 @@ TagManager:
   - 
   - 
   - Player
-  - 
+  - Ignore
   - Platform
   - 
   - Bullet
   - 
   - 
+  - Item
+  - 
+  - 
+  - 
+  - 
+  - Enemy
+  - 
+  - Destructable
   - 
   - 
   - 
@@ -27,15 +35,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PostProcess
   - 
   m_SortingLayers:
   - name: Background
