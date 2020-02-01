@@ -15,7 +15,6 @@ public class GhostTrail : MonoBehaviour
     void Awake()
     {
         ghostsParent = transform.parent;
-        _sprite = ghostsParent.GetComponentInChildren<SpriteRenderer>();
         movement = ghostsParent.GetComponentInChildren<CharacterController2D>();
     }
 
@@ -23,6 +22,7 @@ public class GhostTrail : MonoBehaviour
     {
         Sequence s = DOTween.Sequence();
 
+        _sprite = PlayerController.PlayerInstance.m_sprite;
         for (int i = 0; i < transform.childCount; i++)
         {
             Transform currentGhost = transform.GetChild(i);

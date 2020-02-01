@@ -6,6 +6,7 @@ public class MeleeAttackSMB : SceneLinkedSMB<PlayerController>
     {
         m_MonoBehaviour.ResetAttack();
         m_MonoBehaviour.DisMovable();
+        m_MonoBehaviour.DisShapable();
     }
     
     public override void OnSLStatePostEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -21,7 +22,8 @@ public class MeleeAttackSMB : SceneLinkedSMB<PlayerController>
 
     public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        m_MonoBehaviour.EnMovable();
         m_MonoBehaviour.CheckForMeleeAttack();
+        m_MonoBehaviour.EnMovable();
+        m_MonoBehaviour.EnShapable();
     }
 }

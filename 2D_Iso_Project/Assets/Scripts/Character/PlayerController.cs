@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
 
     //****************** meleeAttack
-    private int attackIndex = 0;
+    int attackIndex = 0;
     private const int Attack_Sequence = 4;
     private const float Press_Delay = 0.5f;
     private bool attack_pressDown = false;
@@ -41,6 +41,26 @@ public class PlayerController : MonoBehaviour
         attackIndex = 0;
     }
 
+
+    //****************** Shape
+    int shapeIndex = 0;
+    public int ShapeNumber;
+    public GameObject[] ShapeList;
+    public SpriteRenderer m_sprite { get; private set; }
+
+    bool shapable = true;
+    public void EnShapable() => shapable = true;
+    public void DisShapable() => shapable = false;
+
+    private bool canShape = true;
+    private const float shape_Delay = 2.0f;
+    IEnumerator EnableAfterDelay()
+    {
+        yield return new WaitForSeconds(shape_Delay);
+        canShape = true;
+    }
+
+    public bool[] CanMeleeAttack = { true, false };
 
 
     //****************** Audios
@@ -54,18 +74,14 @@ public class PlayerController : MonoBehaviour
     {
         PlayerInstance = this;
         audioSource = GetComponent<AudioSource>();
-        animator = GetComponentInChildren<Animator>();
         m_body = GetComponent<CharacterController2D>();
         damager = GetComponent<Damager>();
         damageable = GetComponent<Damageable>();
         m_shaker = Camera.main.GetComponent<CameraShaker>();
-    }
 
-    void Start()
-    {
-        SceneLinkedSMB<PlayerController>.Initialise(animator, this);
+        ShapeNumber = ShapeList.Length;
+        ShapeInit();
     }
-
 
     void FixedUpdate()
     {
@@ -78,7 +94,7 @@ public class PlayerController : MonoBehaviour
         float horizontal = PlayerInput.Instance.Horizontal.Value;
         float Vertical = PlayerInput.Instance.Vertical.Value;
         Vector2 movement = new Vector2(horizontal, Vertical);
-        if(PlayerInput.Instance.Jump.Down)
+        if (PlayerInput.Instance.Jump.Down)
         {
             m_body.Dash();
         }
@@ -89,6 +105,11 @@ public class PlayerController : MonoBehaviour
             attack_pressDown = true;
             StopCoroutine("DisPressAfterDelay");
             StartCoroutine("DisPressAfterDelay");
+        }
+
+        if (PlayerInput.Instance.Interact.Down)
+        {
+            ShapeChange();
         }
     }
 
@@ -102,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
     public void CheckForMeleeAttack()
     {
-        if(attack_pressDown && damager.IsCanDamage)
+        if (attack_pressDown && damager.IsCanDamage && CanMeleeAttack[shapeIndex])
         {
             attackIndex = attackIndex % Attack_Sequence + 1;
             animator.SetInteger(hash_attack, attackIndex);
@@ -120,7 +141,31 @@ public class PlayerController : MonoBehaviour
 
         m_shaker.Shake();
         //FindObjectOfType<CameraShaker>().Shake();
-        //FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
+    }
+
+
+
+    public void ShapeInit()
+    {
+        animator = ShapeList[shapeIndex].GetComponent<Animator>();
+        m_sprite = ShapeList[shapeIndex].GetComponent<SpriteRenderer>();
+        SceneLinkedSMB<PlayerController>.Initialise(animator, this);
+    }
+
+    public void ShapeChange()
+    {
+        if (!canShape || !shapable)
+            return;
+
+        canShape = false;
+        StartCoroutine(EnableAfterDelay());
+
+        ShapeList[shapeIndex].SetActive(false);
+        shapeIndex = (shapeIndex + 1)% ShapeNumber;
+        ShapeList[shapeIndex].SetActive(true);
+        ShapeInit();
+
+        FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }
 
 
@@ -136,6 +181,9 @@ public class PlayerController : MonoBehaviour
         else
             return false;
     }
+
+
+
 
 
     public void PlaySource(AudioClip clip)
