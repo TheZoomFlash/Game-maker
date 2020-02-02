@@ -8,12 +8,6 @@ public class CharacterController2D : MonoBehaviour
 {
     [Header("move settings")]
     public float moveSpeed = 3f;
-    public float dashSpeed = 10f;
-    public float dashDuration = 0.2f;
-    public float dashInterval = 1f;
-    protected bool canDash = true;
-    protected bool isDashing = false;
-    GhostTrail ghostTrail;
 
     public Rigidbody2D Rigidbody2D { get; protected set; }
     public Vector2 Position { get { return Rigidbody2D.position; } }
@@ -41,8 +35,11 @@ public class CharacterController2D : MonoBehaviour
 
     void Awake()
     {
+        OnAwake();
+    }
+    protected virtual void OnAwake()
+    {
         Rigidbody2D = GetComponent<Rigidbody2D>();
-        ghostTrail = GetComponentInChildren<GhostTrail>();
 
         m_ContactFilter.layerMask = m_layerMask;
         m_ContactFilter.useLayerMask = true;
@@ -82,31 +79,9 @@ public class CharacterController2D : MonoBehaviour
         m_NextMovement = movement;
     }
 
-    public void Dash()
-    {
-        if (!isMovable || !canDash || isDashing)
-            return;
-
-        canDash = false;
-        isDashing = true;
-        StartCoroutine(StopDash());
-        StartCoroutine(CanDash());
-        ghostTrail.ShowGhost();
-    }
-
-    IEnumerator StopDash()
-    {
-        yield return new WaitForSeconds(dashDuration);
-        isDashing = false;
-    }
-    IEnumerator CanDash()
-    {
-        yield return new WaitForSeconds(dashInterval);
-        canDash = true;
-    }
 
 
-    void DirUpdate(Vector2 dir)
+    protected void DirUpdate(Vector2 dir)
     {
         if (!Mathf.Approximately(dir.x, 0.0f) || !Mathf.Approximately(dir.y, 0.0f))
         {
@@ -114,13 +89,10 @@ public class CharacterController2D : MonoBehaviour
         }
     }
 
-    void SpeedUpdate(Vector2 movement)
+    protected virtual void SpeedUpdate(Vector2 movement)
     {
         Velocity = Mathf.Clamp(movement.magnitude, 0, 1);
-        if (isDashing)
-            Velocity = dashSpeed;
-        else
-            Velocity *= moveSpeed;
+        Velocity *= moveSpeed;
     }
 
     /// <summary>

@@ -32,7 +32,9 @@ public class RippleEffect : MonoBehaviour
     public float dropInterval = 0.5f;
 
     [SerializeField, HideInInspector]
+#pragma warning disable IDE0044 // 添加只读修饰符
     Shader shader;
+#pragma warning restore IDE0044 // 添加只读修饰符
 
     class Droplet
     {

@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     static public PlayerController PlayerInstance { get; private set; }
 
     //****************** script
-    CharacterController2D m_body;
+    PlayerMove m_body;
     Damager damager;
     Damageable damageable;
     CameraShaker m_shaker;
@@ -22,45 +22,34 @@ public class PlayerController : MonoBehaviour
     protected readonly int hash_hit = Animator.StringToHash("hit");
 
 
-    //****************** move
-    public void DisMovable() => m_body.DisableMove();
-    public void EnMovable() => m_body.EnableMove();
-    public float attackMoveDis = 0.3f;
+    //****************** Shape
+    [Header("Shape Setting")]
+    public GameObject[] ShapeList;
+    public float shapeDuration = 0.1f;
+    public float shapeInterval = 2.0f;
+    public bool[] CanMeleeAttack = { true, false };
 
+    public SpriteRenderer m_sprite { get; private set; }
 
+    Ability shapeAB;
+    int shapeIndex = 0;
+    int ShapeNumber;
+
+    
     //****************** meleeAttack
+    [Header("meleeAttack Setting")]
+    public float attackPressDelay = 0.5f;
+    public float attackMoveDis = 0.3f;
+    
+    const int Attack_Sequence = 4;
     int attackIndex = 0;
-    private const int Attack_Sequence = 4;
-    private const float Press_Delay = 0.5f;
-    private bool attack_pressDown = false;
-    public void ResetAttack() => animator.SetInteger(hash_attack, 0);
+    bool attack_pressDown = false;
     IEnumerator DisPressAfterDelay()
     {
-        yield return new WaitForSeconds(Press_Delay);
+        yield return new WaitForSeconds(attackPressDelay);
         attack_pressDown = false;
         attackIndex = 0;
     }
-
-
-    //****************** Shape
-    int shapeIndex = 0;
-    public int ShapeNumber;
-    public GameObject[] ShapeList;
-    public SpriteRenderer m_sprite { get; private set; }
-
-    bool shapable = true;
-    public void EnShapable() => shapable = true;
-    public void DisShapable() => shapable = false;
-
-    private bool canShape = true;
-    private const float shape_Delay = 2.0f;
-    IEnumerator EnableAfterDelay()
-    {
-        yield return new WaitForSeconds(shape_Delay);
-        canShape = true;
-    }
-
-    public bool[] CanMeleeAttack = { true, false };
 
 
     //****************** Audios
@@ -70,15 +59,26 @@ public class PlayerController : MonoBehaviour
     AudioSource audioSource;
 
 
+    //public Anim
+    public void DisMovable() => m_body.DisableMove();
+    public void EnMovable() => m_body.EnableMove();
+    public void DisShapable() => shapeAB.Disable();
+    public void EnShapable() => shapeAB.Enable();
+    public void ResetAttack() => animator.SetInteger(hash_attack, 0);
+
+
+
     void Awake()
     {
         PlayerInstance = this;
         audioSource = GetComponent<AudioSource>();
-        m_body = GetComponent<CharacterController2D>();
+        m_body = GetComponent<PlayerMove>();
         damager = GetComponent<Damager>();
         damageable = GetComponent<Damageable>();
         m_shaker = Camera.main.GetComponent<CameraShaker>();
 
+        shapeAB = gameObject.AddComponent<Ability>() as Ability;
+        shapeAB.InitSetParams(shapeDuration, shapeInterval);
         ShapeNumber = ShapeList.Length;
         ShapeInit();
     }
@@ -154,11 +154,10 @@ public class PlayerController : MonoBehaviour
 
     public void ShapeChange()
     {
-        if (!canShape || !shapable)
+        if (!shapeAB.Usable)
             return;
 
-        canShape = false;
-        StartCoroutine(EnableAfterDelay());
+        shapeAB.Use();
 
         ShapeList[shapeIndex].SetActive(false);
         shapeIndex = (shapeIndex + 1)% ShapeNumber;
@@ -173,13 +172,14 @@ public class PlayerController : MonoBehaviour
     public bool GetHealth(int healthAmount)
     {
         return true;
-        if (damageable.NeedHealth)
-        {
-            damageable.GainHealth(healthAmount);
-            return true;
-        }
-        else
-            return false;
+        //TODO:
+        //if (damageable.NeedHealth)
+        //{
+        //    damageable.GainHealth(healthAmount);
+        //    return true;
+        //}
+        //else
+        //    return false;
     }
 
 
