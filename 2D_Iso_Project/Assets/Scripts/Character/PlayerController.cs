@@ -2,25 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+
+[RequireComponent(typeof(PlayerMove))]
+[RequireComponent(typeof(Damager))]
+[RequireComponent(typeof(Damageable))]
+[RequireComponent(typeof(CameraShaker))]
+public class PlayerController : BaseController<PlayerMove>
 {
     static public PlayerController PlayerInstance { get; private set; }
 
     //****************** script
-    PlayerMove m_body;
     Damager damager;
     Damageable damageable;
     CameraShaker m_shaker;
+    
 
-
-    //****************** animator
-    Animator animator;
-    protected readonly int hash_xDir = Animator.StringToHash("xDir");
-    protected readonly int hash_yDir = Animator.StringToHash("yDir");
-    protected readonly int hash_velocity = Animator.StringToHash("velocity");
-    protected readonly int hash_attack = Animator.StringToHash("meleeAttack");
-    protected readonly int hash_hit = Animator.StringToHash("hit");
-
+    public SpriteRenderer m_sprite{ get; private set; }
 
     //****************** Shape
     [Header("Shape Setting")]
@@ -29,7 +26,7 @@ public class PlayerController : MonoBehaviour
     public float shapeInterval = 2.0f;
     public bool[] CanMeleeAttack = { true, false };
 
-    public SpriteRenderer m_sprite { get; private set; }
+
 
     Ability shapeAB;
     int shapeIndex = 0;
@@ -44,35 +41,20 @@ public class PlayerController : MonoBehaviour
     const int Attack_Sequence = 4;
     int attackIndex = 0;
     bool attack_pressDown = false;
-    IEnumerator DisPressAfterDelay()
-    {
-        yield return new WaitForSeconds(attackPressDelay);
-        attack_pressDown = false;
-        attackIndex = 0;
-    }
-
-
-    //****************** Audios
-    [Header("Audio settings")]
-    public AudioClip attackClip;
-    public AudioClip hitClip;
-    AudioSource audioSource;
-
+    protected Coroutine Cor_DisPress = null;
 
     //public Anim
-    public void DisMovable() => m_body.DisableMove();
-    public void EnMovable() => m_body.EnableMove();
     public void DisShapable() => shapeAB.Disable();
     public void EnShapable() => shapeAB.Enable();
-    public void ResetAttack() => animator.SetInteger(hash_attack, 0);
 
 
 
-    void Awake()
+    protected override void OnAwake()
     {
+        base.OnAwake();
+
         PlayerInstance = this;
-        audioSource = GetComponent<AudioSource>();
-        m_body = GetComponent<PlayerMove>();
+        
         damager = GetComponent<Damager>();
         damageable = GetComponent<Damageable>();
         m_shaker = Camera.main.GetComponent<CameraShaker>();
@@ -83,10 +65,10 @@ public class PlayerController : MonoBehaviour
         ShapeInit();
     }
 
-    void FixedUpdate()
+    protected override void OnFixedUpdate()
     {
         ProcessInput();
-        AnimationUpdate();
+        base.OnFixedUpdate();
     }
 
     void ProcessInput()
@@ -103,8 +85,9 @@ public class PlayerController : MonoBehaviour
         if (PlayerInput.Instance.MeleeAttack.Down)
         {
             attack_pressDown = true;
-            StopCoroutine("DisPressAfterDelay");
-            StartCoroutine("DisPressAfterDelay");
+            if (Cor_DisPress != null)
+                StopCoroutine(Cor_DisPress);
+            Cor_DisPress = StartCoroutine(DisPressAfterDelay());
         }
 
         if (PlayerInput.Instance.Interact.Down)
@@ -113,20 +96,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void AnimationUpdate()
+    IEnumerator DisPressAfterDelay()
     {
-        animator.SetFloat(hash_xDir, m_body.FaceDir.x);
-        animator.SetFloat(hash_yDir, m_body.FaceDir.y);
-        animator.SetFloat(hash_velocity, m_body.Velocity);
+        yield return new WaitForSeconds(attackPressDelay);
+        attack_pressDown = false;
+        attackIndex = 0;
     }
-
 
     public void CheckForMeleeAttack()
     {
         if (attack_pressDown && damager.IsCanDamage && CanMeleeAttack[shapeIndex])
         {
             attackIndex = attackIndex % Attack_Sequence + 1;
-            animator.SetInteger(hash_attack, attackIndex);
+            m_animator.SetInteger(hash_attack, attackIndex);
             //Debug.Log("attackIndex :" + attackIndex);
         }
     }
@@ -147,9 +129,9 @@ public class PlayerController : MonoBehaviour
 
     public void ShapeInit()
     {
-        animator = ShapeList[shapeIndex].GetComponent<Animator>();
+        m_animator = ShapeList[shapeIndex].GetComponent<Animator>();
         m_sprite = ShapeList[shapeIndex].GetComponent<SpriteRenderer>();
-        SceneLinkedSMB<PlayerController>.Initialise(animator, this);
+        SceneLinkedSMB<PlayerController>.Initialise(m_animator, this);
     }
 
     public void ShapeChange()

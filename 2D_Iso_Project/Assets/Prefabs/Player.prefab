@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 537617752}
   - component: {fileID: 537617751}
   m_Layer: 8
-  m_Name: Witch2
+  m_Name: Witch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 5225122527254928784}
   - component: {fileID: 4260007050483990166}
   m_Layer: 8
-  m_Name: Witch
+  m_Name: 'Dracula '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -531,9 +531,9 @@ GameObject:
   - component: {fileID: 7411629339577067244}
   - component: {fileID: 5225122527157751478}
   - component: {fileID: 5225122527157751479}
-  - component: {fileID: 5225122527250307563}
   - component: {fileID: 5225122528538493161}
   - component: {fileID: 1822897086260362247}
+  - component: {fileID: 2004952589}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -571,7 +571,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -602,47 +602,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0038be263d74d9b95eb7a5862c9f4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackMoveDis: 0.3
-  ShapeNumber: 0
+  attackClip: {fileID: 0}
+  hitClip: {fileID: 0}
   ShapeList:
   - {fileID: 7411629339491824124}
   - {fileID: 537617749}
-  attackClip: {fileID: 0}
-  hitClip: {fileID: 0}
---- !u!114 &5225122527250307563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7411629339577067247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b0b6690bbb89414e8626673b4c5a571, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 3
-  dashSpeed: 10
-  dashDuration: 0.2
-  dashInterval: 1
-  isMovable: 1
-  m_layerMask:
-    serializedVersion: 2
-    m_Bits: 256
-  m_ContactFilter:
-    useTriggers: 0
-    useLayerMask: 0
-    useDepth: 0
-    useOutsideDepth: 0
-    useNormalAngle: 0
-    useOutsideNormalAngle: 0
-    layerMask:
-      serializedVersion: 2
-      m_Bits: 0
-    minDepth: 0
-    maxDepth: 0
-    minNormalAngle: 0
-    maxNormalAngle: 0
+  shapeDuration: 0.1
+  shapeInterval: 2
+  CanMeleeAttack: 0100
+  attackPressDelay: 0.5
+  attackMoveDis: 0.3
 --- !u!114 &5225122528538493161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,6 +649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealeh: 5
+  DamageBackDis: 3
   invulnerableAfterDamage: 1
   invulnerabilityDuration: 3
   centreOffset: {x: 0, y: 1}
@@ -696,3 +666,37 @@ MonoBehaviour:
   OnGainHealth:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2004952589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7411629339577067247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a06ff9e6de65d854a8a388afd598e023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  isMovable: 1
+  m_layerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ContactFilter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 0
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+  dashSpeed: 10
+  dashDuration: 0.2
+  dashInvertal: 1

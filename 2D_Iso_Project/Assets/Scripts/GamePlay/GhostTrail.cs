@@ -6,7 +6,7 @@ public class GhostTrail : MonoBehaviour
 {
     private SpriteRenderer _sprite;
     private Transform ghostsParent;
-    private CharacterController2D movement;
+    private CharacterMove movement;
     public Color trailColor;
     public Color fadeColor;
     public float ghostInterval;
@@ -15,7 +15,7 @@ public class GhostTrail : MonoBehaviour
     void Awake()
     {
         ghostsParent = transform.parent;
-        movement = ghostsParent.GetComponentInChildren<CharacterController2D>();
+        movement = ghostsParent.GetComponentInChildren<CharacterMove>();
     }
 
     public void ShowGhost()

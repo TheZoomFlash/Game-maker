@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : CharacterController2D
+public class PlayerMove : CharacterMove
 {
     [Space]
     [Header("dash Setting")]

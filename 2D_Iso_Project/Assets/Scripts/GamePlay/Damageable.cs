@@ -19,10 +19,13 @@ public class Damageable : MonoBehaviour
     public int maxHealeh = 5;
     protected int m_CurrentHealth;
     public int CurrentHealth { get { return m_CurrentHealth; } }
+    public bool IsAlive => m_CurrentHealth == 0;
+    public bool IsDead => !IsAlive;
     public bool NeedHealth => m_CurrentHealth < maxHealeh;
 
     protected Vector2 m_DamageDirection;
     public Vector2 DamageDirection { get { return m_DamageDirection; } }
+    public float DamageBackDis = 3f;
 
     public bool invulnerableAfterDamage = true;
     public float invulnerabilityDuration = 3f;
