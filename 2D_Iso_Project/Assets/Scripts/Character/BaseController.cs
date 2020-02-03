@@ -69,4 +69,9 @@ public abstract class BaseController<T> : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    protected void PlaySource(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
+    }
 }

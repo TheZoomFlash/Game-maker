@@ -116,11 +116,13 @@ public class PlayerController : BaseController<PlayerMove>
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = (mousePos - (Vector2)m_body.Position).normalized;
         damager.Attack(dir);
+        m_body.SetFaceDir(dir);
 
         if(damager.attackDash)
             m_body.ForceMove(dir * damager.attackMoveDis * Mathf.Sqrt(2 * attackIndex));
 
         m_shaker.Shake();
+        PlaySource(attackClip);
         //FindObjectOfType<CameraShaker>().Shake();
     }
 
@@ -164,13 +166,6 @@ public class PlayerController : BaseController<PlayerMove>
     }
 
 
-
-
-
-    public void PlaySource(AudioClip clip)
-    {
-        audioSource.PlayOneShot(clip);
-    }
 
 
 
