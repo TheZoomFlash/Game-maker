@@ -10,11 +10,13 @@ public abstract class BaseController<T> : MonoBehaviour
 
     //****************** animator
     protected Animator m_animator;
+    protected int attackIndex = 0;
     protected readonly int hash_xDir = Animator.StringToHash("xDir");
     protected readonly int hash_yDir = Animator.StringToHash("yDir");
     protected readonly int hash_velocity = Animator.StringToHash("velocity");
     protected readonly int hash_attack = Animator.StringToHash("meleeAttack");
     protected readonly int hash_hit = Animator.StringToHash("hit");
+    protected readonly int hash_dead = Animator.StringToHash("dead");
 
 
     //****************** Audios
@@ -56,5 +58,15 @@ public abstract class BaseController<T> : MonoBehaviour
         m_animator.SetFloat(hash_xDir, m_body.FaceDir.x);
         m_animator.SetFloat(hash_yDir, m_body.FaceDir.y);
         m_animator.SetFloat(hash_velocity, m_body.Velocity);
+    }
+
+    protected virtual void StartDie()
+    {
+        m_animator.SetTrigger(hash_dead);
+    }
+
+    protected virtual void Die()
+    {
+        gameObject.SetActive(false);
     }
 }

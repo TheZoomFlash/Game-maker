@@ -97,6 +97,11 @@ public class CharacterMove : MonoBehaviour
         }
     }
 
+    public void FaceBack()
+    {
+        FaceDir = -FaceDir;
+    }
+
     protected virtual void SpeedUpdate(Vector2 movement)
     {
         Velocity = Mathf.Clamp(movement.magnitude, 0, 1);

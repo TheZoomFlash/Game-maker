@@ -166,13 +166,13 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
-  m_AngularDrag: 0.05
+  m_LinearDrag: 10
+  m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!210 &2079923368
 SortingGroup:
@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealeh: 4
+  isBeatBack: 0
   DamageBackDis: 3
   invulnerableAfterDamage: 0
   invulnerabilityDuration: 0
@@ -229,6 +230,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   damageRate: 1
+  attackDash: 0
+  attackMoveDis: 0.3
+  damageRange: 1
   offset: 0.75
   size: {x: 1.5, y: 1}
   canHitTriggers: 0
@@ -287,15 +291,11 @@ MonoBehaviour:
   Target: {fileID: 0}
   isTargetInView: 0
   viewDirection: 0
-  viewFov: 0
-  viewDistance: 0
+  viewFov: 220
+  viewDistance: 5
   timeBeforeTargetLost: 3
-  meleeRange: 2
-  attackDash: 0
-  attackForce: {x: 0, y: 0}
   shootingOrigin: {fileID: 0}
-  flickeringDuration: 0
+  flickeringDuration: 0.5
   shootingAudio: {fileID: 0}
-  meleeAttackAudio: {fileID: 0}
   dieAudio: {fileID: 0}
   footStepAudio: {fileID: 0}

@@ -19,8 +19,14 @@ public class Damager : MonoBehaviour
     public int damage = 1;
     public float damageRate = 1f;
     private float nextDamageTimer = 0f;
+    
+    [Tooltip("if true, the enemy will jump/dash forward when it melee attack")]
+    public bool attackDash;
+    [Tooltip("The Dis used by the dash")]
+    public float attackMoveDis = 0.3f;
 
     // range
+    public float damageRange = 1.0f;
     public float offset = 0.75f;
     public Vector2 size = new Vector2(1.5f, 1.0f);
 
@@ -91,9 +97,8 @@ public class Damager : MonoBehaviour
             Damageable damageable = m_LastHit.GetComponentInParent<Damageable>();
             if (damageable)
             {
-                OnDamageableHit.Invoke(this, damageable);
                 damageable.TakeDamage(this, ignoreInvincibility);
-
+                //OnDamageableHit.Invoke(this, damageable);
                 //if (disableDamageAfterHit)
                 //    DisableDamage();
             }
@@ -110,6 +115,10 @@ public class Damager : MonoBehaviour
 
         Handles.color = new Color(1.0f, 0, 0, 0.2f);
         Handles.DrawWireCube(_center, size);
+
+        //Draw attack range
+        Handles.color = new Color(0.0f, 0, 1.0f, 0.1f);
+        Handles.DrawSolidDisc(transform.position, Vector3.back, damageRange);
     }
 #endif
 

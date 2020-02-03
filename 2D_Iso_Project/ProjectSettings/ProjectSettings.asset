@@ -580,6 +580,7 @@ PlayerSettings:
       daydreamIconForeground: {fileID: 0}
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
+    Build: 0
     UNet: 1
   luminIcon:
     m_Name: 
@@ -601,9 +602,10 @@ PlayerSettings:
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 6
   cloudProjectId: 
+  cloudProjectId: c2b02476-4ae0-4753-bb0a-810a93f5b357
   framebufferDepthMemorylessMode: 0
-  projectName: 
-  organizationId: 
+  projectName: 2D_IsoTilemaps_Project
+  organizationId: flashzoom
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

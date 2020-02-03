@@ -17,11 +17,9 @@ public class EnemyController : BaseController<CharacterMove>
 
 
     //****************** Move
+    [Space]
     public Transform Target;
     public bool isTargetInView = false;
-
-    protected bool isDead { get { return damageable.IsDead; } }
-
 
     //[Header("References")]
     //[Tooltip("If the enemy will be using ranged attack, set a prefab of the projectile it should use")]
@@ -39,15 +37,6 @@ public class EnemyController : BaseController<CharacterMove>
     public float timeBeforeTargetLost = 3.0f;
     protected float m_TimeSinceLastTargetView;
 
-
-    [Header("Melee Attack Data")]
-    [EnemyMeleeRangeCheck]
-    public float meleeRange = 3.0f;
-    [Tooltip("if true, the enemy will jump/dash forward when it melee attack")]
-    public bool attackDash;
-    [Tooltip("The force used by the dash")]
-    public Vector2 attackForce;
-
     [Header("Range Attack Data")]
     [Tooltip("From where the projectile are spawned")]
     public Transform shootingOrigin;
@@ -62,11 +51,6 @@ public class EnemyController : BaseController<CharacterMove>
     protected SpriteRenderer m_SpriteRenderer;
 
     protected Collider2D m_Collider;
-
-
-
-    
-    protected float m_FireTimer = 0.0f;
 
     //as we flip the sprite instead of rotating/scaling the object, this give the forward vector according to the sprite orientation
     //protected Vector2 m_SpriteForward;
@@ -87,7 +71,6 @@ public class EnemyController : BaseController<CharacterMove>
     //****************** Audio
     [Header("Audio")]
     public RandomAudioPlayer shootingAudio;
-    public RandomAudioPlayer meleeAttackAudio;
     public RandomAudioPlayer dieAudio;
     public RandomAudioPlayer footStepAudio;
 
@@ -121,9 +104,6 @@ public class EnemyController : BaseController<CharacterMove>
 
     protected override void OnFixedUpdate()
     {
-        if (isDead)
-            return;
-
         base.OnFixedUpdate();
         UpdateTimers();
     }
@@ -132,9 +112,6 @@ public class EnemyController : BaseController<CharacterMove>
     {
         if (m_TimeSinceLastTargetView > 0.0f)
             m_TimeSinceLastTargetView -= Time.deltaTime;
-
-        if (m_FireTimer > 0.0f)
-            m_FireTimer -= Time.deltaTime;
     }
 
     public void SetHorizontalSpeed(float horizontalSpeed)
@@ -184,13 +161,13 @@ public class EnemyController : BaseController<CharacterMove>
             return;
 
         CheckTargetIsNear();
-        if (!isTargetInView)
-            return;
-
-        //m_animator.SetTrigger(m_HashSpottedPara);
+        if (m_TimeSinceLastTargetView > 0f || isTargetInView)
+            AttackOrRun();
+        else
+            Patrol();
     }
 
-    public void CheckTargetIsNear()
+    void CheckTargetIsNear()
     {
         Vector2 dis = Target.position - transform.position;
 
@@ -199,10 +176,9 @@ public class EnemyController : BaseController<CharacterMove>
             isTargetInView = false;
             return;
         }
-            
 
         float angle = Vector2.Angle(m_body.FaceDir, dis);
-        Debug.Log("dis :" + dis + ", angle :" + angle + ", viewFov :" + viewFov * 0.5f);
+        //Debug.Log("dis :" + dis + ", angle :" + angle + ", viewFov :" + viewFov * 0.5f);
 
         if (angle > viewFov * 0.5f)
         {
@@ -214,18 +190,17 @@ public class EnemyController : BaseController<CharacterMove>
         m_TimeSinceLastTargetView = timeBeforeTargetLost;
     }
 
-
     public void CheckTargetStillVisible()
     {
-        if (Target == null)
-            return;
+        //if (Target == null)
+        //    return;
 
-        CheckTargetIsNear();
+        //CheckTargetIsNear();
 
-        if (!isTargetInView && m_TimeSinceLastTargetView <= 0.0f)
-        {
-            ForgetTarget();
-        }
+        //if (!isTargetInView && m_TimeSinceLastTargetView <= 0.0f)
+        //{
+        //    ForgetTarget();
+        //}
     }
 
     public void OrientToTarget()
@@ -237,7 +212,30 @@ public class EnemyController : BaseController<CharacterMove>
         SetFacingData(toTarget.normalized);
     }
 
-    
+    void AttackOrRun()
+    {
+        if(CheckForMeleeAttack())
+        {
+            attackIndex = 1;
+            m_animator.SetInteger(hash_attack, attackIndex);
+        }
+        else
+        {
+            RunToTarget();
+        }
+    }
+
+    void RunToTarget()
+    {
+        Vector2 toTarget = Target.position - transform.position;
+        m_body.Move(toTarget.normalized);
+    }
+
+
+    void Patrol()
+    {
+        m_body.Move(Vector2.zero);
+    }
 
     public void ForgetTarget()
     {
@@ -255,50 +253,49 @@ public class EnemyController : BaseController<CharacterMove>
         m_TargetShootPosition = Target.position;
     }
 
-    //Call every frame when the enemy is in pursuit to check for range & Trigger the attack if in range
-    public void CheckMeleeAttack()
+    bool CheckForMeleeAttack()
     {
-        if (Target == null)
+        //if (!meleeDamager.IsCanDamage)
+        //{
+        //    return;
+        //}
+
+        if ((Target.position - transform.position).sqrMagnitude < (meleeDamager.damageRange * meleeDamager.damageRange))
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    //This is called when the Damager get enabled (so the enemy can damage the player). Likely be called by the animation throught animation event (see the attack animation of the Chomper)
+    public void MeleeAttack()
+    {
+        if (Target == null || !meleeDamager.IsCanDamage)
         {//we lost the target, shouldn't shoot
             return;
         }
 
-        if ((Target.position - transform.position).sqrMagnitude < (meleeRange * meleeRange))
-        {
-            m_animator.SetTrigger(m_HashMeleeAttackPara);
-            meleeAttackAudio.PlayRandomSound();
-        }
-    }
+        Vector2 dir = (Target.position - transform.position).normalized;
 
-    //This is called when the Damager get enabled (so the enemy can damage the player). Likely be called by the animation throught animation event (see the attack animation of the Chomper)
-    public void StartAttack()
-    {
-        //meleeDamager.EnableDamage();
-        //meleeDamager.gameObject.SetActive(true);
+        if (meleeDamager.attackDash)
+            m_body.ForceMove(dir * meleeDamager.attackMoveDis);
 
-        //if (attackDash)
-        //    m_MoveVector = new Vector2(m_SpriteForward.x * attackForce.x, attackForce.y);
-    }
+        meleeDamager.Attack(dir);
+        //meleeAttackAudio.PlayRandomSound();
 
-    public void EndAttack()
-    {
-        //if (meleeDamager != null)
-        //{
-        //    meleeDamager.gameObject.SetActive(false);
-        //    meleeDamager.DisableDamage();
-        //}
     }
 
     //This is call each update if the enemy is in a attack/shooting state, but the timer will early exit if too early to shoot.
     public void CheckShootingTimer()
     {
-        if (m_FireTimer > 0.0f)
-            return;
+        //if (m_FireTimer > 0.0f)
+        //    return;
 
-        if (Target == null)
-        {//we lost the target, shouldn't shoot
-            return;
-        }
+        //if (Target == null)
+        //{//we lost the target, shouldn't shoot
+        //    return;
+        //}
 
         //m_animator.SetTrigger(m_HashShootingPara);
         //shootingAudio.PlayRandomSound();
@@ -383,13 +380,10 @@ public class EnemyController : BaseController<CharacterMove>
 
     public void Hit(Damager Damager, Damageable Damageable)
     {
-        if (isDead)
-            return;
-
-        
         Vector2 DamagerDir = Damager.transform.position - transform.position;
 
-        m_body.ForceMove(DamagerDir.normalized * damageable.DamageBackDis);
+        if(Damageable.isBeatBack)
+            m_body.ForceMove(DamagerDir.normalized * damageable.DamageBackDis);
 
         if (m_FlickeringCoroutine != null)
         {
@@ -402,6 +396,11 @@ public class EnemyController : BaseController<CharacterMove>
         //m_animator.SetTrigger(m_HashHitPara);
     }
 
+    // real dead
+    public void DeadDisappear()
+    {
+        Die();
+    }
 
 
     protected IEnumerator Flicker(float duration)
@@ -414,7 +413,7 @@ public class EnemyController : BaseController<CharacterMove>
         int state = 1;
 
         m_SpriteRenderer.color = transparent;
-
+        Debug.Log("Flicker");
         while (timer < duration)
         {
             yield return null;
@@ -448,20 +447,13 @@ public class EnemyController : BaseController<CharacterMove>
     private void OnDrawGizmosSelected()
     {
         //draw the cone of view
-        bool spriteFaceLeft = true;
-        Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
-        forward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * forward;
-
-        //if (GetComponent<SpriteRenderer>().flipX) forward.x = -forward.x;
+        Vector3 forward = Vector2.right;
+        forward = Quaternion.Euler(0, 0, viewDirection) * forward;
 
         Vector3 endpoint = transform.position + (Quaternion.Euler(0, 0, viewFov * 0.5f) * forward);
 
         Handles.color = new Color(0, 1.0f, 0, 0.2f);
         Handles.DrawSolidArc(transform.position, -Vector3.forward, (endpoint - transform.position).normalized, viewFov, viewDistance);
-
-        //Draw attack range
-        Handles.color = new Color(1.0f, 0, 0, 0.1f);
-        Handles.DrawSolidDisc(transform.position, Vector3.back, meleeRange);
     }
 #endif
 }

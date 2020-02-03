@@ -5,8 +5,14 @@ using UnityEngine;
 
 public class EnemyAttackSMB : SceneLinkedSMB<EnemyController>
 {
-    public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        m_MonoBehaviour.ResetAttack();
+    }
+
+    public override void OnSLStatePostEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        m_MonoBehaviour.MeleeAttack();
+        //m_MonoBehaviour.SetHorizontalMovement(m_MonoBehaviour.meleeAttackDashSpeed * m_MonoBehaviour.GetFacing());
     }
 }

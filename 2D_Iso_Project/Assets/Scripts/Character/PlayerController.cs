@@ -39,7 +39,6 @@ public class PlayerController : BaseController<PlayerMove>
     public float attackMoveDis = 0.3f;
     
     const int Attack_Sequence = 4;
-    int attackIndex = 0;
     bool attack_pressDown = false;
     protected Coroutine Cor_DisPress = null;
 
@@ -109,7 +108,6 @@ public class PlayerController : BaseController<PlayerMove>
         {
             attackIndex = attackIndex % Attack_Sequence + 1;
             m_animator.SetInteger(hash_attack, attackIndex);
-            //Debug.Log("attackIndex :" + attackIndex);
         }
     }
 
@@ -119,7 +117,8 @@ public class PlayerController : BaseController<PlayerMove>
         Vector2 dir = (mousePos - (Vector2)m_body.Position).normalized;
         damager.Attack(dir);
 
-        m_body.ForceMove(dir * attackMoveDis * Mathf.Sqrt(2 * attackIndex));
+        if(damager.attackDash)
+            m_body.ForceMove(dir * damager.attackMoveDis * Mathf.Sqrt(2 * attackIndex));
 
         m_shaker.Shake();
         //FindObjectOfType<CameraShaker>().Shake();
