@@ -70,7 +70,7 @@ public class PlayerInput : InputComponent//, IDataPersister
     {
         m_HaveControl = true;
 
-        GainControl(Pause);
+        //GainControl(Pause);
         GainControl(Interact);
         GainControl(MeleeAttack);
         GainControl(RangedAttack);
@@ -83,7 +83,7 @@ public class PlayerInput : InputComponent//, IDataPersister
     {
         m_HaveControl = false;
 
-        ReleaseControl(Pause, resetValues);
+        //ReleaseControl(Pause, resetValues);
         ReleaseControl(Interact, resetValues);
         ReleaseControl(MeleeAttack, resetValues);
         ReleaseControl(RangedAttack, resetValues);
