@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         Application.targetFrameRate = 60;
         scene_animator = UIMain.GetComponent<Animator>();
     }
@@ -30,11 +32,11 @@ public class GameManager : MonoBehaviour
     //temp
     void Update()
     {
-        if(PlayerInput.Instance.Pause.Down)
+        // temp
+        if (PlayerInput.Instance.Pause.Down)
         {
             TurnStory();
         }
-        // temp
         if(Input.GetKeyDown(KeyCode.P))
         {
             LoadNextScene();

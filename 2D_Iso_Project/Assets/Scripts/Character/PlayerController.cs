@@ -53,6 +53,7 @@ public class PlayerController : BaseController<PlayerMove>
         base.OnAwake();
 
         PlayerInstance = this;
+        DontDestroyOnLoad(gameObject);
         
         damager = GetComponent<Damager>();
         damageable = GetComponent<Damageable>();

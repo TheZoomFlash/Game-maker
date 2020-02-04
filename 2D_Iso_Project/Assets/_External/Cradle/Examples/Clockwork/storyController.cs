@@ -5,7 +5,17 @@ using UnityEngine;
 
 public class storyController : MonoBehaviour
 {
+    public static storyController Instance { get; private set; }
+
     public Story story;
+
+    void Awake()
+    {
+        if (story == null)
+            story = GetComponent<Story>();
+
+        DontDestroyOnLoad(transform.parent);
+    }
 
     void Start()
     {
