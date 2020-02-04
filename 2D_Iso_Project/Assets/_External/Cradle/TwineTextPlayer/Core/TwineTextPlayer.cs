@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Cradle;
 using Cradle.StoryFormats.Harlowe;
+using DG.Tweening;
 
 [ExecuteInEditMode]
 public class TwineTextPlayer : MonoBehaviour {
@@ -19,13 +20,18 @@ public class TwineTextPlayer : MonoBehaviour {
 	public bool AutoDisplay = true;
 	public bool ShowNamedLinks = true;
 
+    List<StoryOutput> tempList = new List<StoryOutput>();
+    float outDuration = 0.5f;
+    float outTimer = 0f;
+
+
 	static Regex rx_splitText = new Regex(@"(\s+|[^\s]+)");
 
 	void Start () {
 		if (!Application.isPlaying)
 			return;
 
-		LinkTemplate.gameObject.SetActive(false);
+        LinkTemplate.gameObject.SetActive(false);
 		((RectTransform)LinkTemplate.transform).SetParent(null);
 		LinkTemplate.transform.hideFlags = HideFlags.HideInHierarchy;
 		
@@ -67,21 +73,31 @@ public class TwineTextPlayer : MonoBehaviour {
 
 	// .....................
 	// Clicks
-
-	#if UNITY_EDITOR
 	void Update()
 	{
-		if (Application.isPlaying)
-			return;
+		//if (Application.isPlaying)
+		//	return;
 
-		// In edit mode, disable autoplay on the story if the text player will be starting the story
-		if (this.StartStory)
-		{
-			foreach (Story story in this.GetComponents<Story>())
-				story.AutoPlay = false;
-		}
+		//// In edit mode, disable autoplay on the story if the text player will be starting the story
+		//if (this.StartStory)
+		//{
+		//	foreach (Story story in this.GetComponents<Story>())
+		//		story.AutoPlay = false;
+		//}
+
+        if(tempList.Count != 0)
+        {
+            if (outTimer > 0)
+                outTimer -= Time.deltaTime;
+            else
+            {
+                outTimer = outDuration;
+                DisplayOutput(tempList[0]);
+                tempList.RemoveAt(0);
+            }
+        }
+        
 	}
-	#endif
 	
 	public void Clear()
 	{
@@ -97,11 +113,11 @@ public class TwineTextPlayer : MonoBehaviour {
 
 	void Story_OnOutput(StoryOutput output)
 	{
-		if (!this.AutoDisplay)
-			return;
-
-		DisplayOutput(output);
-	}
+        tempList.Add(output);
+        //if (!this.AutoDisplay)
+        //    return;
+        //DisplayOutput(output);
+    }
 
 	void Story_OnOutputRemoved(StoryOutput outputThatWasRemoved)
 	{
@@ -131,17 +147,20 @@ public class TwineTextPlayer : MonoBehaviour {
 			var text = (StoryText)output;
 			if (!string.IsNullOrEmpty(text.Text))
 			{
-				foreach (Match m in rx_splitText.Matches(text.Text))
-				{
-					string word = m.Value;
-					Text uiWord = (Text)Instantiate(WordTemplate);
-					uiWord.gameObject.SetActive(true);
-					uiWord.text = word;
-					uiWord.name = word;
-					AddToUI(uiWord.rectTransform, output, uiInsertIndex);
-					if (uiInsertIndex >= 0)
-						uiInsertIndex++;
-				}
+                //            foreach (Match m in rx_splitText.Matches(text.Text))
+                //{
+
+                //}
+                string word = text.Text;
+                Text uiWord = (Text)Instantiate(WordTemplate);
+                uiWord.gameObject.SetActive(true);
+                //uiWord.text = word;
+                float duration = Mathf.Clamp(word.Length * 0.01f, 0, 0.5f);
+                var s = uiWord.DOText(word, duration).SetEase(Ease.Linear);
+                uiWord.name = word;
+                AddToUI(uiWord.rectTransform, output, uiInsertIndex);
+                if (uiInsertIndex >= 0)
+                    uiInsertIndex++;
 			}
 		}
 		else if (output is StoryLink)

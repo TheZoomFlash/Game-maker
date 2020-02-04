@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public Canvas UIMain;
     public float fadeTime = 1f;
 
-    bool isStory = false;
+    bool isStory = true;
     Animator scene_animator;
 
     void Awake()
@@ -20,6 +20,11 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Application.targetFrameRate = 60;
         scene_animator = UIMain.GetComponent<Animator>();
+    }
+
+    void Start()
+    {
+        UpdateStory();
     }
 
     //temp
@@ -39,6 +44,11 @@ public class GameManager : MonoBehaviour
     public void TurnStory()
     {
         isStory = !isStory;
+        UpdateStory();
+    }
+
+    public void UpdateStory()
+    {
         if (!isStory)
         {
             story.gameObject.SetActive(false);
