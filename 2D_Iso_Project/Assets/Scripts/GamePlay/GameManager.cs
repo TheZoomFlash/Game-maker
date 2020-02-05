@@ -33,19 +33,25 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // temp
-        if (PlayerInput.Instance.Pause.Down)
-        {
-            TurnStory();
-        }
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            LoadNextScene();
-        }
+        //if (PlayerInput.Instance.Pause.Down)
+        //{
+        //    TurnStory();
+        //}
+        //if(Input.GetKeyDown(KeyCode.P))
+        //{
+        //    LoadNextScene();
+        //}
+    }
+
+    void SetStory(bool b)
+    {
+        isStory = b;
     }
 
     public void TurnStory()
     {
-        isStory = !isStory;
+        SetStory(!isStory);
+        //Debug.Log("isStory :" + isStory);
         UpdateStory();
     }
 
@@ -77,10 +83,16 @@ public class GameManager : MonoBehaviour
 
     IEnumerator LoadLevel(int levelIndex)
     {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelIndex);
         scene_animator.SetTrigger("start");
 
-        yield return new WaitForSeconds(fadeTime);
+        //yield return new WaitForSeconds(fadeTime);
+        // Wait until the asynchronous scene fully loads
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
 
-        SceneManager.LoadScene(levelIndex);
+        TurnStory();
     }
 }
