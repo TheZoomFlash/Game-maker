@@ -10,9 +10,6 @@ using UnityEditor;
 [RequireComponent(typeof(CharacterMove))]
 public class EnemyController : BaseController<CharacterMove>
 {
-    //****************** script
-    Damager meleeDamager;
-    Damageable damageable;
     //Damager contactDamager;
 
 
@@ -42,8 +39,9 @@ public class EnemyController : BaseController<CharacterMove>
     public Transform shootingOrigin;
     protected Vector3 m_TargetShootPosition;
 
-
-    protected Collider2D m_Collider;
+    public LayerMask obstacleLay;
+    Collider2D m_Collider;
+    float checkDistance;
 
     //as we flip the sprite instead of rotating/scaling the object, this give the forward vector according to the sprite orientation
     //protected Vector2 m_SpriteForward;
@@ -70,8 +68,6 @@ public class EnemyController : BaseController<CharacterMove>
 
         m_animator = GetComponentInChildren<Animator>();
         m_Collider = GetComponentInChildren<Collider2D>();
-        meleeDamager = GetComponent<Damager>();
-        damageable = GetComponent<Damageable>();
 
         //if (projectilePrefab != null)
         //    m_BulletPool = BulletPool.GetObjectPool(projectilePrefab.gameObject, 8);
@@ -83,8 +79,6 @@ public class EnemyController : BaseController<CharacterMove>
 
         SceneLinkedSMB<EnemyController>.Initialise(m_animator, this);
 
-        damageable.OnTakeDamage.AddListener(Hit);
-        damageable.OnDie.AddListener(Die);
         //m_LocalBounds = new Bounds();
         //int count = m_body.Rigidbody2D.GetAttachedColliders(s_ColliderCache);
         //for (int i = 0; i < count; ++i)
@@ -105,25 +99,6 @@ public class EnemyController : BaseController<CharacterMove>
             m_TimeSinceLastTargetView -= Time.deltaTime;
     }
 
-
-    public bool CheckForObstacle(float forwardDistance)
-    {
-        ////we circle cast with a size sligly small than the collider height. That avoid to collide with very small bump on the ground
-        //if (Physics2D.CircleCast(m_Collider.bounds.center, m_Collider.bounds.extents.y - 0.2f, m_SpriteForward, forwardDistance, m_body.m_ContactFilter.layerMask.value))
-        //{
-        //    return true;
-        //}
-
-        //Vector3 castingPosition = (Vector2)(transform.position + m_LocalBounds.center) + m_SpriteForward * m_LocalBounds.extents.x;
-        //Debug.DrawLine(castingPosition, castingPosition + Vector3.down * (m_LocalBounds.extents.y + 0.2f));
-
-        //if (!Physics2D.CircleCast(castingPosition, 0.1f, Vector2.down, m_LocalBounds.extents.y + 0.2f, m_body.m_layerMask.value))
-        //{
-        //    return true;
-        //}
-
-        return false;
-    }
 
     public void SetFacingData(Vector2 faceDir)
     {
@@ -156,25 +131,45 @@ public class EnemyController : BaseController<CharacterMove>
 
     void CheckTargetIsNear()
     {
+        isTargetInView = false;
         Vector2 dis = Target.position - transform.position;
-
+        if (CheckForObstacle(dis))
+        {
+            m_TimeSinceLastTargetView = 0f;
+            return;
+        }
+            
         if (dis.sqrMagnitude > viewDistance * viewDistance)
-        {
-            isTargetInView = false;
             return;
-        }
-
         float angle = Vector2.Angle(m_body.FaceDir, dis);
-        //Debug.Log("dis :" + dis + ", angle :" + angle + ", viewFov :" + viewFov * 0.5f);
-
         if (angle > viewFov * 0.5f)
-        {
-            isTargetInView = false;
             return;
-        }
 
         isTargetInView = true;
         m_TimeSinceLastTargetView = timeBeforeTargetLost;
+    }
+
+
+    bool CheckForObstacle(Vector2 dis)
+    {
+        //we circle cast with a size sligly small than the collider height. That avoid to collide with very small bump on the ground
+        //if (Physics2D.CircleCast(m_Collider.bounds.center, m_Collider.bounds.extents.y - 0.2f,
+        //    dir, checkDistance, m_body.m_ContactFilter.layerMask.value))
+        //{
+        //    return true;
+        //}
+
+        Vector2 castingPosition = transform.position;// + m_LocalBounds.center) + dir * m_LocalBounds.extents.x;
+        //Debug.DrawLine(castingPosition, castingPosition + dis);// Vector3.down * (m_LocalBounds.extents.y + 0.2f));
+
+        RaycastHit2D hit = Physics2D.Raycast(castingPosition, dis.normalized,
+            Mathf.Min(viewDistance, dis.magnitude), obstacleLay.value);
+        if (hit.collider != null)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public void CheckTargetStillVisible()
@@ -204,7 +199,7 @@ public class EnemyController : BaseController<CharacterMove>
         if(CheckForMeleeAttack())
         {
             attackIndex = 1;
-            m_animator.SetInteger(hash_attack, attackIndex);
+            MeleeAttackStart();
         }
         else
         {
@@ -214,8 +209,8 @@ public class EnemyController : BaseController<CharacterMove>
 
     void RunToTarget()
     {
-        Vector2 toTarget = Target.position - transform.position;
-        m_body.Move(toTarget.normalized);
+        Vector2 toTarget = (Target.position - transform.position).normalized;
+        m_body.Move(toTarget);
     }
 
 
@@ -242,10 +237,10 @@ public class EnemyController : BaseController<CharacterMove>
 
     bool CheckForMeleeAttack()
     {
-        if (!meleeDamager.IsCanDamage)
+        if (!damager.IsCanDamage)
             return false;
 
-        if ((Target.position - transform.position).sqrMagnitude < (meleeDamager.damageRange * meleeDamager.damageRange))
+        if (Vector2.Distance(Target.position, transform.position) < damager.damageRange)
             return true;
         else
             return false;
@@ -258,13 +253,15 @@ public class EnemyController : BaseController<CharacterMove>
             return;
 
         Vector2 dir = (Target.position - transform.position).normalized;
+        MeleeAttack(dir);
+    }
 
-        meleeDamager.Attack(dir);
-        m_body.SetFaceDir(dir);
-        if (meleeDamager.attackDash)
-            m_body.ForceMove(dir * meleeDamager.attackMoveDis);
+    public override void Hit(Damager Damager, Damageable Damageable)
+    {
+        base.Hit(Damager, Damageable);
 
-        //meleeAttackAudio.PlayRandomSound();
+        Vector2 DamagerDir = (Damager.transform.position - transform.position).normalized;
+        m_body.SetFaceDir(DamagerDir);
     }
 
     //This is call each update if the enemy is in a attack/shooting state, but the timer will early exit if too early to shoot.
@@ -356,8 +353,8 @@ public class EnemyController : BaseController<CharacterMove>
 
     public void DisableDamage()
     {
-        if (meleeDamager != null)
-            meleeDamager.DisableDamage();
+        if (damager != null)
+            damager.DisableDamage();
         //if (contactDamager != null)
         //    contactDamager.DisableDamage();
     }

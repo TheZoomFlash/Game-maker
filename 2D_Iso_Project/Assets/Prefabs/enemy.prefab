@@ -292,6 +292,9 @@ MonoBehaviour:
   viewDistance: 5
   timeBeforeTargetLost: 3
   shootingOrigin: {fileID: 0}
+  obstacleLay:
+    serializedVersion: 2
+    m_Bits: 4194304
   shootingAudio: {fileID: 0}
   dieAudio: {fileID: 0}
   footStepAudio: {fileID: 0}

@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(Damager))]
+[RequireComponent(typeof(Damageable))]
 public abstract class BaseController<T> : MonoBehaviour 
     where T : CharacterMove
 {
     protected T m_body;
+    protected Damager damager;
+    protected Damageable damageable;
     public Vector2 Position { get { return m_body.Position; } }
 
     //****************** animator
@@ -49,7 +54,12 @@ public abstract class BaseController<T> : MonoBehaviour
     {
         m_body = GetComponent<T>();
         m_sprite = GetComponentInChildren<SpriteRenderer>();
+        damager = GetComponent<Damager>();
+        damageable = GetComponent<Damageable>();
         audioSource = GetComponent<AudioSource>();
+
+        damageable.OnTakeDamage.AddListener(Hit);
+        damageable.OnDie.AddListener(Die);
     }
 
 
@@ -71,10 +81,32 @@ public abstract class BaseController<T> : MonoBehaviour
     }
 
 
+    public virtual void Teleport(Vector2 pos)
+    {
+        m_body.Teleport(pos);
+    }
+
+
     protected virtual void MeleeAttackStart()
     {
         m_animator.SetInteger(hash_attack, attackIndex);
     }
+
+
+    public void MeleeAttack(Vector2 dir)
+    {
+        damager.Attack(dir);
+        m_body.SetFaceDir(dir);
+
+        if (damager.attackDash)
+            m_body.ForceMove(dir * damager.attackMoveDis * Mathf.Sqrt(2 * attackIndex));
+
+        if(attackClip)
+            PlaySource(attackClip);
+    }
+
+
+
 
 
     protected virtual void HitStart()
@@ -83,7 +115,7 @@ public abstract class BaseController<T> : MonoBehaviour
     }
 
 
-    public void Hit(Damager Damager, Damageable Damageable)
+    public virtual void Hit(Damager Damager, Damageable Damageable)
     {
         Vector2 DamagerDir = transform.position - Damager.transform.position;
 
@@ -125,6 +157,8 @@ public abstract class BaseController<T> : MonoBehaviour
 
         m_sprite.color = m_OriginalColor;
     }
+
+
 
 
 

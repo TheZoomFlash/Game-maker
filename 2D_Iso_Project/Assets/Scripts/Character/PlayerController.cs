@@ -4,15 +4,11 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(PlayerMove))]
-[RequireComponent(typeof(Damager))]
-[RequireComponent(typeof(Damageable))]
 public class PlayerController : BaseController<PlayerMove>
 {
     static public PlayerController PlayerInstance { get; private set; }
 
     //****************** script
-    Damager damager;
-    Damageable damageable;
     CameraShaker m_shaker;
 
 
@@ -46,8 +42,6 @@ public class PlayerController : BaseController<PlayerMove>
         PlayerInstance = this;
         DontDestroyOnLoad(gameObject);
         
-        damager = GetComponent<Damager>();
-        damageable = GetComponent<Damageable>();
         m_shaker = Camera.main.GetComponent<CameraShaker>();
 
         shapeAB = gameObject.AddComponent<Ability>() as Ability;
@@ -58,9 +52,6 @@ public class PlayerController : BaseController<PlayerMove>
     void Start()
     {
         ShapeInit();
-
-        damageable.OnTakeDamage.AddListener(Hit);
-        //damageable.OnDie.AddListener(Die);
     }
 
 
@@ -117,14 +108,8 @@ public class PlayerController : BaseController<PlayerMove>
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = (mousePos - (Vector2)m_body.Position).normalized;
 
-        damager.Attack(dir);
-        m_body.SetFaceDir(dir);
-
-        if(damager.attackDash)
-            m_body.ForceMove(dir * damager.attackMoveDis * Mathf.Sqrt(2 * attackIndex));
-
+        MeleeAttack(dir);
         m_shaker.Shake();
-        PlaySource(attackClip);
         //FindObjectOfType<CameraShaker>().Shake();
     }
 
