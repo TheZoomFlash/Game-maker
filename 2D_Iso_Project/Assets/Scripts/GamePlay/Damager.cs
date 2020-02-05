@@ -54,7 +54,7 @@ public class Damager : MonoBehaviour
     protected Collider2D m_LastHit;
     public Collider2D LastHit { get { return m_LastHit; } }
 
-    public DamagableEvent OnDamageableHit;
+    //public DamagableEvent OnDamageableHit;
     //public NonDamagableEvent OnNonDamageableHit;
 
     void Awake()

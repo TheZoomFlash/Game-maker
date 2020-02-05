@@ -198,12 +198,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealeh: 4
-  isBeatBack: 0
-  DamageBackDis: 3
-  invulnerableAfterDamage: 0
-  invulnerabilityDuration: 0
+  isBeatBack: 1
+  DamageBackDis: 1
+  invulnerableAfterDamage: 1
+  invulnerabilityDuration: 0.4
   centreOffset: {x: 0, y: 1}
-  disableOnDeath: 0
   OnHealthSet:
     m_PersistentCalls:
       m_Calls: []
@@ -240,9 +239,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   ignoreInvincibility: 0
-  OnDamageableHit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &794083448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackClip: {fileID: 0}
   hitClip: {fileID: 0}
+  m_sprite: {fileID: 0}
   Target: {fileID: 0}
   isTargetInView: 0
   viewDirection: 0
@@ -295,7 +292,6 @@ MonoBehaviour:
   viewDistance: 5
   timeBeforeTargetLost: 3
   shootingOrigin: {fileID: 0}
-  flickeringDuration: 0.5
   shootingAudio: {fileID: 0}
   dieAudio: {fileID: 0}
   footStepAudio: {fileID: 0}

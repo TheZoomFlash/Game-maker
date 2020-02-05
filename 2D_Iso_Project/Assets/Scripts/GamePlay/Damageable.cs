@@ -26,10 +26,10 @@ public class Damageable : MonoBehaviour
     protected Vector2 m_DamageDirection;
     public Vector2 DamageDirection { get { return m_DamageDirection; } }
     public bool isBeatBack = false;
-    public float DamageBackDis = 3f;
+    public float DamageBackDis = 1f;
 
     public bool invulnerableAfterDamage = true;
-    public float invulnerabilityDuration = 3f;
+    public float invulnerabilityDuration = 1f;
     protected float m_InulnerabilityTimer;
     protected bool m_Invulnerable = false;
     public void DisableInvulnerability() => m_Invulnerable = false;
@@ -39,10 +39,10 @@ public class Damageable : MonoBehaviour
         //technically don't ignore timer, just set it to an insanly big number. Allow to avoid to add more test & special case.
         m_InulnerabilityTimer = ignoreTimer ? float.MaxValue : invulnerabilityDuration;
     }
-    
+
     [Tooltip("An offset from the obejct position used to set from where the distance to the Damager is computed")]
     public Vector2 centreOffset = new Vector2(0f, 1f);
-    public bool disableOnDeath = false;
+    //public bool disableOnDeath = false;
 
     //[HideInInspector]
     public HealthEvent OnHealthSet;
@@ -72,7 +72,7 @@ public class Damageable : MonoBehaviour
     public void TakeDamage(Damager Damager, bool ignoreInvincible = false)
     {
         //Debug.Log(transform.name + " TakeDamage");
-        if ((m_Invulnerable && !ignoreInvincible) || m_CurrentHealth <= 0)
+        if (IsDead || (m_Invulnerable && !ignoreInvincible))
             return;
 
         //we can reach that point if the Damager was one that was ignoring invincible state.
@@ -82,10 +82,12 @@ public class Damageable : MonoBehaviour
             SetHealth(m_CurrentHealth - Damager.damage);
         }
 
-        m_DamageDirection = transform.position + (Vector3)centreOffset - Damager.transform.position;
+        //m_DamageDirection = transform.position + (Vector3)centreOffset - Damager.transform.position;
 
-        if(m_CurrentHealth > 0)
+        if (IsAlive)
             OnTakeDamage.Invoke(Damager, this);
+        else
+            OnDie.Invoke(Damager, this);
     }
 
     private void SetHealth(int amount)
@@ -104,12 +106,12 @@ public class Damageable : MonoBehaviour
 
     public void CheckDie()
     {
-        if (m_CurrentHealth <= 0)
+        if (IsDead)
         {
             OnDie.Invoke(null, this);
             EnableInvulnerability();
-            if (disableOnDeath)
-                gameObject.SetActive(false);
+            //if (disableOnDeath)
+            //    gameObject.SetActive(false);
         }
     }
 

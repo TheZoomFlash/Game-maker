@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMove))]
 [RequireComponent(typeof(Damager))]
 [RequireComponent(typeof(Damageable))]
-[RequireComponent(typeof(CameraShaker))]
 public class PlayerController : BaseController<PlayerMove>
 {
     static public PlayerController PlayerInstance { get; private set; }
@@ -15,9 +14,7 @@ public class PlayerController : BaseController<PlayerMove>
     Damager damager;
     Damageable damageable;
     CameraShaker m_shaker;
-    
 
-    public SpriteRenderer m_sprite{ get; private set; }
 
     //****************** Shape
     [Header("Shape Setting")]
@@ -26,26 +23,20 @@ public class PlayerController : BaseController<PlayerMove>
     public float shapeInterval = 2.0f;
     public bool[] CanMeleeAttack = { true, false };
 
-
-
-    Ability shapeAB;
     int shapeIndex = 0;
     int ShapeNumber;
+    Ability shapeAB;
+    public void DisShapable() => shapeAB.Disable();
+    public void EnShapable() => shapeAB.Enable();
 
-    
+
     //****************** meleeAttack
     [Header("meleeAttack Setting")]
     public float attackPressDelay = 0.5f;
-    public float attackMoveDis = 0.3f;
     
     const int Attack_Sequence = 4;
     bool attack_pressDown = false;
     protected Coroutine Cor_DisPress = null;
-
-    //public Anim
-    public void DisShapable() => shapeAB.Disable();
-    public void EnShapable() => shapeAB.Enable();
-
 
 
     protected override void OnAwake()
@@ -62,8 +53,16 @@ public class PlayerController : BaseController<PlayerMove>
         shapeAB = gameObject.AddComponent<Ability>() as Ability;
         shapeAB.InitSetParams(shapeDuration, shapeInterval);
         ShapeNumber = ShapeList.Length;
-        ShapeInit();
     }
+
+    void Start()
+    {
+        ShapeInit();
+
+        damageable.OnTakeDamage.AddListener(Hit);
+        //damageable.OnDie.AddListener(Die);
+    }
+
 
     protected override void OnFixedUpdate()
     {
@@ -108,14 +107,16 @@ public class PlayerController : BaseController<PlayerMove>
         if (attack_pressDown && damager.IsCanDamage && CanMeleeAttack[shapeIndex])
         {
             attackIndex = attackIndex % Attack_Sequence + 1;
-            m_animator.SetInteger(hash_attack, attackIndex);
+            MeleeAttackStart();
         }
     }
+
 
     public void MeleeAttack()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 dir = (mousePos - (Vector2)m_body.Position).normalized;
+
         damager.Attack(dir);
         m_body.SetFaceDir(dir);
 

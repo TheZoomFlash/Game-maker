@@ -42,13 +42,6 @@ public class EnemyController : BaseController<CharacterMove>
     public Transform shootingOrigin;
     protected Vector3 m_TargetShootPosition;
 
-    [Header("Misc")]
-    [Tooltip("Time in seconds during which the enemy flicker after being hit")]
-    public float flickeringDuration;
-    protected Coroutine m_FlickeringCoroutine = null;
-    protected Color m_OriginalColor;
-
-    protected SpriteRenderer m_SpriteRenderer;
 
     protected Collider2D m_Collider;
 
@@ -63,9 +56,6 @@ public class EnemyController : BaseController<CharacterMove>
     protected readonly int m_HashSpottedPara = Animator.StringToHash("Spotted");
     protected readonly int m_HashShootingPara = Animator.StringToHash("Shooting");
     protected readonly int m_HashTargetLostPara = Animator.StringToHash("TargetLost");
-    protected readonly int m_HashMeleeAttackPara = Animator.StringToHash("MeleeAttack");
-    protected readonly int m_HashHitPara = Animator.StringToHash("Hit");
-    protected readonly int m_HashDeathPara = Animator.StringToHash("Death");
 
 
     //****************** Audio
@@ -78,9 +68,6 @@ public class EnemyController : BaseController<CharacterMove>
     {
         base.OnAwake();
 
-        m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        m_OriginalColor = m_SpriteRenderer.color;
-
         m_animator = GetComponentInChildren<Animator>();
         m_Collider = GetComponentInChildren<Collider2D>();
         meleeDamager = GetComponent<Damager>();
@@ -90,10 +77,14 @@ public class EnemyController : BaseController<CharacterMove>
         //    m_BulletPool = BulletPool.GetObjectPool(projectilePrefab.gameObject, 8);
     }
 
-    private void Start()
+    void Start()
     {
-        SceneLinkedSMB<EnemyController>.Initialise(m_animator, this);
         Target = PlayerController.PlayerInstance.transform;
+
+        SceneLinkedSMB<EnemyController>.Initialise(m_animator, this);
+
+        damageable.OnTakeDamage.AddListener(Hit);
+        damageable.OnDie.AddListener(Die);
         //m_LocalBounds = new Bounds();
         //int count = m_body.Rigidbody2D.GetAttachedColliders(s_ColliderCache);
         //for (int i = 0; i < count; ++i)
@@ -114,10 +105,6 @@ public class EnemyController : BaseController<CharacterMove>
             m_TimeSinceLastTargetView -= Time.deltaTime;
     }
 
-    public void SetHorizontalSpeed(float horizontalSpeed)
-    {
-        //m_MoveVector.x = horizontalSpeed * m_SpriteForward.x;
-    }
 
     public bool CheckForObstacle(float forwardDistance)
     {
@@ -255,15 +242,11 @@ public class EnemyController : BaseController<CharacterMove>
 
     bool CheckForMeleeAttack()
     {
-        //if (!meleeDamager.IsCanDamage)
-        //{
-        //    return;
-        //}
+        if (!meleeDamager.IsCanDamage)
+            return false;
 
         if ((Target.position - transform.position).sqrMagnitude < (meleeDamager.damageRange * meleeDamager.damageRange))
-        {
             return true;
-        }
         else
             return false;
     }
@@ -271,19 +254,17 @@ public class EnemyController : BaseController<CharacterMove>
     //This is called when the Damager get enabled (so the enemy can damage the player). Likely be called by the animation throught animation event (see the attack animation of the Chomper)
     public void MeleeAttack()
     {
-        if (Target == null || !meleeDamager.IsCanDamage)
-        {//we lost the target, shouldn't shoot
+        if (Target == null)
             return;
-        }
 
         Vector2 dir = (Target.position - transform.position).normalized;
 
+        meleeDamager.Attack(dir);
+        m_body.SetFaceDir(dir);
         if (meleeDamager.attackDash)
             m_body.ForceMove(dir * meleeDamager.attackMoveDis);
 
-        meleeDamager.Attack(dir);
         //meleeAttackAudio.PlayRandomSound();
-
     }
 
     //This is call each update if the enemy is in a attack/shooting state, but the timer will early exit if too early to shoot.
@@ -370,65 +351,8 @@ public class EnemyController : BaseController<CharacterMove>
         return velocity;
     }
 
-    public void Die(Damager Damager, Damageable Damageable)
-    {
-
-        //m_animator.SetTrigger(m_HashDeathPara);
-
-        //dieAudio.PlayRandomSound();
-    }
-
-    public void Hit(Damager Damager, Damageable Damageable)
-    {
-        Vector2 DamagerDir = Damager.transform.position - transform.position;
-
-        if(Damageable.isBeatBack)
-            m_body.ForceMove(DamagerDir.normalized * damageable.DamageBackDis);
-
-        if (m_FlickeringCoroutine != null)
-        {
-            StopCoroutine(m_FlickeringCoroutine);
-            m_SpriteRenderer.color = m_OriginalColor;
-        }
-
-        m_FlickeringCoroutine = StartCoroutine(Flicker(Damageable.invulnerabilityDuration));
-
-        //m_animator.SetTrigger(m_HashHitPara);
-    }
-
-    // real dead
-    public void DeadDisappear()
-    {
-        Die();
-    }
 
 
-    protected IEnumerator Flicker(float duration)
-    {
-        float timer = 0f;
-        float sinceLastChange = 0.0f;
-
-        Color transparent = m_OriginalColor;
-        transparent.a = 0.2f;
-        int state = 1;
-
-        m_SpriteRenderer.color = transparent;
-        Debug.Log("Flicker");
-        while (timer < duration)
-        {
-            yield return null;
-            timer += Time.deltaTime;
-            sinceLastChange += Time.deltaTime;
-            if (sinceLastChange > flickeringDuration)
-            {
-                sinceLastChange -= flickeringDuration;
-                state = 1 - state;
-                m_SpriteRenderer.color = state == 1 ? transparent : m_OriginalColor;
-            }
-        }
-
-        m_SpriteRenderer.color = m_OriginalColor;
-    }
 
     public void DisableDamage()
     {

@@ -12,6 +12,6 @@ public class EnemyDeathSMB : SceneLinkedSMB<EnemyController>
 
     public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        m_MonoBehaviour.DeadDisappear();
+        m_MonoBehaviour.RealDie();
     }
 }

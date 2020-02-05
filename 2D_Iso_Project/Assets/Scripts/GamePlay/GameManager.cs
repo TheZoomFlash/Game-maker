@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     //Reference
     public Canvas story;
-    public Canvas UIMain;
+    public Canvas UITransition;
     public float fadeTime = 1f;
 
     bool isStory = true;
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         Application.targetFrameRate = 60;
-        scene_animator = UIMain.GetComponent<Animator>();
+        scene_animator = UITransition.GetComponent<Animator>();
     }
 
     void Start()
@@ -54,13 +54,13 @@ public class GameManager : MonoBehaviour
         if (!isStory)
         {
             story.gameObject.SetActive(false);
-            UIMain.gameObject.SetActive(true);
+            UITransition.gameObject.SetActive(true);
             PlayerInput.Instance.GainControl();
         }
         else
         {
             story.gameObject.SetActive(true);
-            UIMain.gameObject.SetActive(false);
+            UITransition.gameObject.SetActive(false);
             PlayerInput.Instance.ReleaseControl();
         }
     }

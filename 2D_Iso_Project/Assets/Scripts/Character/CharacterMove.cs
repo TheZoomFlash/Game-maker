@@ -72,8 +72,8 @@ public class CharacterMove : MonoBehaviour
     public void Move(Vector2 movement)
     {
         if (!isMovable)
-            return;
-
+            movement = Vector2.zero;
+            
         SetFaceDir(movement);
         SpeedUpdate(movement);
 

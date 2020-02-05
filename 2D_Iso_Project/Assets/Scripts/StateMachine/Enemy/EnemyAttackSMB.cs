@@ -13,6 +13,5 @@ public class EnemyAttackSMB : SceneLinkedSMB<EnemyController>
     public override void OnSLStatePostEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_MonoBehaviour.MeleeAttack();
-        //m_MonoBehaviour.SetHorizontalMovement(m_MonoBehaviour.meleeAttackDashSpeed * m_MonoBehaviour.GetFacing());
     }
 }

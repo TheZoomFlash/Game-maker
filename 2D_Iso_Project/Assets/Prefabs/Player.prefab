@@ -605,6 +605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackClip: {fileID: 8300000, guid: 1300167911a825e4f8920368b94bb0d1, type: 3}
   hitClip: {fileID: 0}
+  m_sprite: {fileID: 0}
   ShapeList:
   - {fileID: 7411629339491824124}
   - {fileID: 537617749}
@@ -637,9 +638,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 5242880
   ignoreInvincibility: 0
-  OnDamageableHit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1822897086260362247
 MonoBehaviour:
   m_ObjectHideFlags: 0
