@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public Canvas UITransition;
     public float fadeTime = 1f;
 
-    bool isStory = true;
+    bool isStory = false;
     Animator scene_animator;
 
     void Awake()
@@ -27,11 +27,44 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateStory();
+        CheckXboxController();
+    }
+
+
+    void CheckXboxController()
+    {
+        // Get Joystick Names
+        string[] temp = Input.GetJoystickNames();
+
+        //Check whether array contains anything
+        if (temp.Length > 0)
+        {
+            //Iterate over every element
+            for (int i = 0; i < temp.Length; ++i)
+            {
+                //Check if the string is empty or not
+                if (!string.IsNullOrEmpty(temp[i]))
+                {
+                    PlayerInput.Instance.inputType = PlayerInput.InputType.Controller;
+                    //Not empty, controller temp[i] is connected
+                    //Debug.Log("Controller " + i + " is connected using: " + temp[i]);
+                }
+                else
+                {
+                    PlayerInput.Instance.inputType = PlayerInput.InputType.MouseAndKeyboard;
+                    //If it is empty, controller i is disconnected
+                    //where i indicates the controller number
+                    //Debug.Log("Controller: " + i + " is disconnected.");
+
+                }
+            }
+        }
     }
 
     //temp
     void Update()
     {
+        CheckXboxController();
         // temp
         //if (PlayerInput.Instance.Pause.Down)
         //{
@@ -60,16 +93,23 @@ public class GameManager : MonoBehaviour
         if (!isStory)
         {
             story.gameObject.SetActive(false);
-            UITransition.gameObject.SetActive(true);
+            //UITransition.gameObject.SetActive(true);
             PlayerInput.Instance.GainControl();
         }
         else
         {
             story.gameObject.SetActive(true);
-            UITransition.gameObject.SetActive(false);
+            //UITransition.gameObject.SetActive(false);
             PlayerInput.Instance.ReleaseControl();
         }
     }
+
+
+    public void ResetPlayer()
+    {
+        PlayerController.PlayerInstance.Teleport(Vector2.zero);
+    }
+
 
     public void LoadScene(int index)
     {
@@ -85,7 +125,6 @@ public class GameManager : MonoBehaviour
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelIndex);
         scene_animator.SetTrigger("start");
-
         //yield return new WaitForSeconds(fadeTime);
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
@@ -94,5 +133,6 @@ public class GameManager : MonoBehaviour
         }
 
         TurnStory();
+        ResetPlayer();
     }
 }

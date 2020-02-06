@@ -288,8 +288,8 @@ MonoBehaviour:
   Target: {fileID: 0}
   isTargetInView: 0
   viewDirection: 0
-  viewFov: 220
-  viewDistance: 5
+  viewFov: 270
+  viewDistance: 4.5
   timeBeforeTargetLost: 3
   shootingOrigin: {fileID: 0}
   obstacleLay:

@@ -15,9 +15,9 @@ public class PlayerInput : InputComponent//, IDataPersister
 
     public InputButton Pause = new InputButton(KeyCode.Escape, XboxControllerButtons.Menu);
     public InputButton Interact = new InputButton(KeyCode.E, XboxControllerButtons.Y);
-    public InputButton MeleeAttack = new InputButton(KeyCode.Mouse0, XboxControllerButtons.X);
+    public InputButton MeleeAttack = new InputButton(KeyCode.Mouse0, XboxControllerButtons.A);
     public InputButton RangedAttack = new InputButton(KeyCode.Mouse1, XboxControllerButtons.B);
-    public InputButton Jump = new InputButton(KeyCode.Space, XboxControllerButtons.A);
+    public InputButton Jump = new InputButton(KeyCode.Space, XboxControllerButtons.X);
     public InputAxis Horizontal = new InputAxis(KeyCode.D, KeyCode.A, XboxControllerAxes.LeftstickHorizontal);
     public InputAxis Vertical = new InputAxis(KeyCode.W, KeyCode.S, XboxControllerAxes.LeftstickVertical);
     //[HideInInspector]

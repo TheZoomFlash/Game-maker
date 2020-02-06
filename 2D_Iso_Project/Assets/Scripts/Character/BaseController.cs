@@ -155,6 +155,7 @@ public abstract class BaseController<T> : MonoBehaviour
             }
         }
 
+        m_OriginalColor.a = 1f;
         m_sprite.color = m_OriginalColor;
     }
 

@@ -105,8 +105,12 @@ public class PlayerController : BaseController<PlayerMove>
 
     public void MeleeAttack()
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 dir = (mousePos - (Vector2)m_body.Position).normalized;
+        Vector2 dir = m_body.FaceDir;
+        //if (PlayerInput.Instance.inputType == PlayerInput.InputType.MouseAndKeyboard)
+        //{
+        //    Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //    dir = (mousePos - (Vector2)m_body.Position).normalized;
+        //}    
 
         MeleeAttack(dir);
         m_shaker.Shake();
