@@ -13,8 +13,6 @@ public class storyController : MonoBehaviour
     {
         if (story == null)
             story = GetComponent<Story>();
-
-        DontDestroyOnLoad(transform.parent);
     }
 
     void Start()

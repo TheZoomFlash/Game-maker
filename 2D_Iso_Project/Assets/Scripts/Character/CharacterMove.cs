@@ -114,6 +114,6 @@ public class CharacterMove : MonoBehaviour
     /// <param name="position">The new position of the character in global space.</param>
     public void Teleport(Vector2 position)
     {
-        Rigidbody2D.MovePosition(position);
+        Rigidbody2D.position = position;
     }
 }

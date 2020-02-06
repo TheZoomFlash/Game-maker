@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         Application.targetFrameRate = 60;
         scene_animator = UITransition.GetComponent<Animator>();
@@ -61,7 +60,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //temp
     void Update()
     {
         CheckXboxController();
@@ -84,7 +82,6 @@ public class GameManager : MonoBehaviour
     public void TurnStory()
     {
         SetStory(!isStory);
-        //Debug.Log("isStory :" + isStory);
         UpdateStory();
     }
 

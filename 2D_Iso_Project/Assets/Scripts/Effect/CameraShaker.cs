@@ -20,8 +20,6 @@ public class CameraShaker : MonoBehaviour
         // Get Virtual Camera Noise Profile
         if (VirtualCamera != null)
             virtualCameraNoise = VirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineBasicMultiChannelPerlin>();
-
-        DontDestroyOnLoad(transform.parent);
     }
 
     // Update is called once per frame

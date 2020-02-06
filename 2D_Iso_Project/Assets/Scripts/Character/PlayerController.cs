@@ -38,9 +38,7 @@ public class PlayerController : BaseController<PlayerMove>
     protected override void OnAwake()
     {
         base.OnAwake();
-
         PlayerInstance = this;
-        DontDestroyOnLoad(gameObject);
         
         m_shaker = Camera.main.GetComponent<CameraShaker>();
 
