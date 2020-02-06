@@ -613,7 +613,6 @@ MonoBehaviour:
   shapeInterval: 2
   CanMeleeAttack: 0100
   attackPressDelay: 0.5
-  attackMoveDis: 0.3
 --- !u!114 &5225122528538493161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,7 +631,7 @@ MonoBehaviour:
   attackMoveDis: 0.3
   damageRange: 1.5
   offset: 0.75
-  size: {x: 1.5, y: 1}
+  size: {x: 1.5, y: 1.3}
   canHitTriggers: 0
   hittableLayers:
     serializedVersion: 2
@@ -656,7 +655,6 @@ MonoBehaviour:
   invulnerableAfterDamage: 1
   invulnerabilityDuration: 3
   centreOffset: {x: 0, y: 1}
-  disableOnDeath: 0
   OnHealthSet:
     m_PersistentCalls:
       m_Calls: []
@@ -681,7 +679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a06ff9e6de65d854a8a388afd598e023, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 5
   isMovable: 1
   m_layerMask:
     serializedVersion: 2
@@ -700,7 +698,7 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  dashSpeed: 10
+  dashSpeed: 15
   dashDuration: 0.2
   dashInvertal: 1
 --- !u!82 &58835391

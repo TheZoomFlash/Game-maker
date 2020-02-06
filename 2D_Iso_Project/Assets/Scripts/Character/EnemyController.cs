@@ -10,19 +10,25 @@ using UnityEditor;
 [RequireComponent(typeof(CharacterMove))]
 public class EnemyController : BaseController<CharacterMove>
 {
-    //Damager contactDamager;
-
+    [Space]
 
     //****************** Move
-    [Space]
+    [HideInInspector]
     public Transform Target;
-    public bool isTargetInView = false;
+    //[HideInInspector]
+    bool isTargetInView = false;
+
+    Vector2[] PatrolList;
+    float partrolWaitTime = 1f;
+    float partrolTimer = 0f;
+    int patrolIndex = 0;
 
     //[Header("References")]
     //[Tooltip("If the enemy will be using ranged attack, set a prefab of the projectile it should use")]
     //public Bullet projectilePrefab;
     //protected BulletPool m_BulletPool;
 
+    [Space]
     [Header("Scanning settings")]
     [Tooltip("The angle of the forward of the view cone. 0 is right, 90 is up, 180 left etc.")]
     [Range(0.0f, 360.0f)]
@@ -48,6 +54,7 @@ public class EnemyController : BaseController<CharacterMove>
     //protected Bounds m_LocalBounds;
     //protected RaycastHit2D[] m_RaycastHitCache = new RaycastHit2D[8];
     //static Collider2D[] s_ColliderCache = new Collider2D[16];
+
 
 
     //****************** animator
@@ -76,6 +83,15 @@ public class EnemyController : BaseController<CharacterMove>
     void Start()
     {
         Target = PlayerController.PlayerInstance.transform;
+        Transform PatrolPosition = transform.Find("PatrolPosition");
+        if(PatrolPosition)
+        {
+            PatrolList = new Vector2[PatrolPosition.childCount];
+            for (int i = 0; i < PatrolPosition.childCount; i++)
+            {
+                PatrolList[i] = PatrolPosition.GetChild(i).position;
+            }
+        }
 
         SceneLinkedSMB<EnemyController>.Initialise(m_animator, this);
 
@@ -216,7 +232,23 @@ public class EnemyController : BaseController<CharacterMove>
 
     void Patrol()
     {
-        m_body.Move(Vector2.zero);
+        if (PatrolList == null || PatrolList.Length == 0)
+            return;
+
+        Vector2 moveDis = Vector2.zero;
+        if(Vector2.Distance(m_body.Position, PatrolList[patrolIndex]) > 0.1f)
+            moveDis = (PatrolList[patrolIndex] - m_body.Position).normalized;
+        else
+        {
+            if (partrolTimer > partrolWaitTime)
+            {
+                patrolIndex = (patrolIndex + 1) % PatrolList.Length;
+                partrolTimer = 0;
+            }   
+            else
+                partrolTimer += Time.deltaTime;
+        }
+        m_body.Move(moveDis);
     }
 
     public void ForgetTarget()
