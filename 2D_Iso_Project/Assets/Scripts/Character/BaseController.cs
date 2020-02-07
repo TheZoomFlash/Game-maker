@@ -12,6 +12,7 @@ public abstract class BaseController<T> : MonoBehaviour
     protected Damager damager;
     protected Damageable damageable;
     public Vector2 Position { get { return m_body.Position; } }
+    public Vector2 FaceDir { get { return m_body.FaceDir; } }
 
     //****************** animator
     protected Animator m_animator;

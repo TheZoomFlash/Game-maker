@@ -11,7 +11,7 @@ public class PlayerMove : CharacterMove
     public float dashInvertal = 1f;
     Ability dashAB;
 
-    GhostTrail ghostTrail;
+    public GhostTrail ghostTrail;
 
     protected override void OnAwake()
     {
@@ -35,7 +35,7 @@ public class PlayerMove : CharacterMove
             return;
 
         dashAB.Use();
-        //ghostTrail.ShowGhost();
+        ghostTrail.ShowGhost();
     }
 
 }
