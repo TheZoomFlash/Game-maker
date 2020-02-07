@@ -19,7 +19,7 @@ public class PlayerMove : CharacterMove
         dashAB = gameObject.AddComponent<Ability>() as Ability;
         dashAB.InitSetParams(dashDuration, dashInvertal);
 
-        ghostTrail = GetComponentInChildren<GhostTrail>();
+        //ghostTrail = GetComponentInChildren<GhostTrail>();
     }
 
     protected override void SpeedUpdate(Vector2 movement)
@@ -35,7 +35,7 @@ public class PlayerMove : CharacterMove
             return;
 
         dashAB.Use();
-        ghostTrail.ShowGhost();
+        //ghostTrail.ShowGhost();
     }
 
 }

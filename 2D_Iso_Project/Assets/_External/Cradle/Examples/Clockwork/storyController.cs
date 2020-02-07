@@ -13,6 +13,7 @@ public class storyController : MonoBehaviour
     {
         if (story == null)
             story = GetComponent<Story>();
+        Instance = this;
     }
 
     void Start()
@@ -29,8 +30,20 @@ public class storyController : MonoBehaviour
     [StoryCue("hidden area room", "Enter")]
     void enter_FirstRoom()
     {
-        Debug.Log("Arrives in first room");
+        Debug.Log("Enter :" + story.CurrentPassage.Name);
         GameManager.Instance.TurnStory();
+    }
+
+    public void GoNext()
+    {
+        //Debug.Log("GoNext");
+        IEnumerable<StoryLink> links = story.GetCurrentLinks();
+        var emtor = links.GetEnumerator();
+        if (emtor.MoveNext())
+        {
+            //Debug.Log("DoLink : " + emtor.Current.Name);
+            story.DoLink(emtor.Current);
+        }
     }
 
     //void story_OnOutput(StoryOutput output)
@@ -43,7 +56,7 @@ public class storyController : MonoBehaviour
     //{
     //    // Do something with the output here
     //    Debug.Log("Story_OnPassageEnter :" + passage.Name);
-    //    if(passage.Name.Equals("Arrives in first room"))
+    //    if (passage.Name)
     //    {
     //        Debug.Log("yes!!!!");
     //        //story.Pause();
@@ -52,25 +65,25 @@ public class storyController : MonoBehaviour
 
     //void story_OnStateChanged(StoryState state)
     //{
-        //Debug.Log("story_OnStateChanged " + story.State);
-        //if (story.State == StoryState.Idle)
-        //{
-        //    Debug.Log("Idle");
-        //    // Interaction methods can be called now
-        //    //story.DoLink("enterTheCastle");
-        //}
-        //else if (story.State == StoryState.Paused)
-        //{
-        //    Debug.Log("Paused");
-        //    // Interaction methods can be called now
-        //    //story.DoLink("enterTheCastle");
-        //    //story.Resume();
-        //}
-        //else if (story.State == StoryState.Playing)
-        //{
-        //    Debug.Log("Playing");
-        //    // Interaction methods can be called now
-        //    //story.DoLink("enterTheCastle");
-        //}
+    //Debug.Log("story_OnStateChanged " + story.State);
+    //if (story.State == StoryState.Idle)
+    //{
+    //    Debug.Log("Idle");
+    //    // Interaction methods can be called now
+    //    //story.DoLink("enterTheCastle");
+    //}
+    //else if (story.State == StoryState.Paused)
+    //{
+    //    Debug.Log("Paused");
+    //    // Interaction methods can be called now
+    //    //story.DoLink("enterTheCastle");
+    //    //story.Resume();
+    //}
+    //else if (story.State == StoryState.Playing)
+    //{
+    //    Debug.Log("Playing");
+    //    // Interaction methods can be called now
+    //    //story.DoLink("enterTheCastle");
+    //}
     //}
 }

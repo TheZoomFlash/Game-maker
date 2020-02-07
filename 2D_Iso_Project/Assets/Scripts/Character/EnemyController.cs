@@ -407,6 +407,18 @@ public class EnemyController : BaseController<CharacterMove>
 
         Handles.color = new Color(0, 1.0f, 0, 0.2f);
         Handles.DrawSolidArc(transform.position, -Vector3.forward, (endpoint - transform.position).normalized, viewFov, viewDistance);
+
+        Handles.color = Color.yellow;
+        Transform PatrolPosition = transform.Find("PatrolPosition");
+        if (PatrolPosition)
+        {
+            PatrolList = new Vector2[PatrolPosition.childCount];
+            for (int i = 0; i < PatrolPosition.childCount; i++)
+            {
+                int j = (i + 1) % PatrolPosition.childCount;
+                Handles.DrawLine(PatrolPosition.GetChild(i).position, PatrolPosition.GetChild(j).position);
+            }
+        }
     }
 #endif
 }

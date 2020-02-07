@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     public Canvas UITransition;
     public float fadeTime = 1f;
 
-    bool isStory = false;
+    bool isStory = true;
     Animator scene_animator;
 
     void Awake()
@@ -63,15 +63,20 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         CheckXboxController();
+        StoryMoveOn();
         // temp
-        //if (PlayerInput.Instance.Pause.Down)
-        //{
-        //    TurnStory();
-        //}
         //if(Input.GetKeyDown(KeyCode.P))
         //{
         //    LoadNextScene();
         //}
+    }
+
+    void StoryMoveOn()
+    {
+        if (isStory && PlayerInput.Instance.Pause.Down)
+        {
+            storyController.Instance.GoNext();
+        }
     }
 
     void SetStory(bool b)
@@ -122,14 +127,15 @@ public class GameManager : MonoBehaviour
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(levelIndex);
         scene_animator.SetTrigger("start");
-        //yield return new WaitForSeconds(fadeTime);
+        yield return new WaitForSeconds(fadeTime);
+
+        ResetPlayer();
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
-
+        yield return new WaitForSeconds(fadeTime);
         TurnStory();
-        ResetPlayer();
     }
 }
