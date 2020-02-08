@@ -27,8 +27,9 @@ public abstract class BaseController<T> : MonoBehaviour
 
     //****************** Audios
     [Header("Audio settings")]
-    public AudioClip attackClip;
+    public AudioClip[] attackClip;
     public AudioClip hitClip;
+    public AudioClip dieClip;
     protected AudioSource audioSource;
 
 
@@ -102,8 +103,8 @@ public abstract class BaseController<T> : MonoBehaviour
         if (damager.attackDash)
             m_body.ForceMove(dir * damager.attackMoveDis * Mathf.Sqrt(2 * attackIndex));
 
-        if(attackClip)
-            PlaySource(attackClip);
+        if(attackClip.Length > attackIndex - 1 && attackClip[attackIndex - 1])
+            PlaySource(attackClip[attackIndex - 1]);
     }
 
 
@@ -113,6 +114,8 @@ public abstract class BaseController<T> : MonoBehaviour
     protected virtual void HitStart()
     {
         m_animator.SetTrigger(hash_hit);
+        if(hitClip)
+            PlaySource(hitClip);
     }
 
 
@@ -167,6 +170,8 @@ public abstract class BaseController<T> : MonoBehaviour
     protected virtual void DieStart()
     {
         m_animator.SetTrigger(hash_dead);
+        if(dieClip)
+            PlaySource(dieClip);
     }
 
     public void Die(Damager Damager, Damageable Damageable)
@@ -184,6 +189,25 @@ public abstract class BaseController<T> : MonoBehaviour
 
     protected void PlaySource(AudioClip clip)
     {
+        //audioSource.loop = false;
         audioSource.PlayOneShot(clip);
+    }
+
+    protected void PlayLoopSource(AudioClip clip, bool isPlay)
+    {
+        if(isPlay)
+        {
+            if(!audioSource.isPlaying)
+            {
+                audioSource.clip = clip;
+                audioSource.loop = true;
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            audioSource.Stop();
+        }
+        //audioSource.PlayScheduled(0.1f);
     }
 }

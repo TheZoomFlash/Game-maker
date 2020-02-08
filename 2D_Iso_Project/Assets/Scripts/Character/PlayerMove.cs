@@ -10,6 +10,7 @@ public class PlayerMove : CharacterMove
     public float dashDuration = 0.2f;
     public float dashInvertal = 1f;
     Ability dashAB;
+    public bool isDashUsable => isMovable && dashAB.Usable;
 
     public GhostTrail ghostTrail;
 
@@ -31,8 +32,8 @@ public class PlayerMove : CharacterMove
 
     public void Dash()
     {
-        if (!isMovable || !dashAB.Usable)
-            return;
+        //if (!isMovable || !dashAB.Usable)
+        //    return;
 
         dashAB.Use();
         ghostTrail.ShowGhost();

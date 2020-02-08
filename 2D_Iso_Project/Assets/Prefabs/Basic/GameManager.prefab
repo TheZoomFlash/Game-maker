@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   story: {fileID: 0}
-  UIMain: {fileID: 0}
+  UITransition: {fileID: 0}
   fadeTime: 1
 --- !u!114 &1108746314062619816
 MonoBehaviour:

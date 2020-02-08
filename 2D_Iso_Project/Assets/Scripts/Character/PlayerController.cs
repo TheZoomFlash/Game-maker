@@ -8,6 +8,11 @@ public class PlayerController : BaseController<PlayerMove>
 {
     static public PlayerController PlayerInstance { get; private set; }
 
+    //****************** Audios Continue
+    public AudioClip footStepClip;
+    public AudioClip dashClip;
+    public AudioClip shapeClip;
+
     //****************** script
     CameraShaker m_shaker;
 
@@ -57,6 +62,13 @@ public class PlayerController : BaseController<PlayerMove>
     {
         ProcessInput();
         base.OnFixedUpdate();
+        //if (m_body.Velocity > 1)
+        //{
+        //    if (footStepClip)
+        //        PlayLoopSource(footStepClip, true);
+        //}
+        //else
+        //    PlayLoopSource(footStepClip, false);
     }
 
     void ProcessInput()
@@ -65,9 +77,8 @@ public class PlayerController : BaseController<PlayerMove>
         float Vertical = PlayerInput.Instance.Vertical.Value;
         Vector2 movement = new Vector2(horizontal, Vertical);
         if (PlayerInput.Instance.Jump.Down)
-        {
-            m_body.Dash();
-        }
+            Dash();
+
         m_body.Move(movement);
 
         if (PlayerInput.Instance.MeleeAttack.Down)
@@ -79,9 +90,8 @@ public class PlayerController : BaseController<PlayerMove>
         }
 
         if (PlayerInput.Instance.Interact.Down)
-        {
             ShapeChange();
-        }
+
     }
 
     IEnumerator DisPressAfterDelay()
@@ -116,6 +126,16 @@ public class PlayerController : BaseController<PlayerMove>
     }
 
 
+    public void Dash()
+    {
+        if (!m_body.isDashUsable)
+            return;
+
+        m_body.Dash();
+        if (dashClip)
+            PlaySource(dashClip);
+    }
+
 
     public void ShapeInit()
     {
@@ -136,6 +156,8 @@ public class PlayerController : BaseController<PlayerMove>
         ShapeList[shapeIndex].SetActive(true);
         ShapeInit();
 
+        if (shapeClip)
+            PlaySource(shapeClip);
         FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }
 

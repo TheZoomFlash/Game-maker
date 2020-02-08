@@ -64,10 +64,8 @@ public class EnemyController : BaseController<CharacterMove>
 
 
     //****************** Audio
-    [Header("Audio")]
-    public RandomAudioPlayer shootingAudio;
-    public RandomAudioPlayer dieAudio;
-    public RandomAudioPlayer footStepAudio;
+    //[Header("Audio")]
+
 
     protected override void OnAwake()
     {
@@ -391,10 +389,6 @@ public class EnemyController : BaseController<CharacterMove>
         //    contactDamager.DisableDamage();
     }
 
-    public void PlayFootStep()
-    {
-        footStepAudio.PlayRandomSound();
-    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
