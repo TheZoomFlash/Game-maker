@@ -93,6 +93,10 @@ public class CharacterMove : MonoBehaviour
     {
         if (!Mathf.Approximately(dir.x, 0.0f) || !Mathf.Approximately(dir.y, 0.0f))
         {
+            if(Mathf.Approximately(Mathf.Abs(dir.x), Mathf.Abs(dir.y)))
+            {
+                dir.x *= 2.0f;
+            }
             FaceDir = dir.normalized;
         }
     }
