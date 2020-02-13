@@ -37,7 +37,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -70}
-  m_SizeDelta: {x: -400, y: -260}
+  m_SizeDelta: {x: -400, y: -340}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4269319188660044549
 CanvasRenderer:
@@ -122,10 +122,10 @@ RectTransform:
   m_Father: {fileID: 4269319188659701825}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 1080, y: 55}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4269319188659603541
 CanvasRenderer:
@@ -221,10 +221,10 @@ RectTransform:
   m_Father: {fileID: 4269319188659701825}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -75}
-  m_SizeDelta: {x: 1080, y: 22}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4269319188660028731
 CanvasRenderer:
@@ -335,10 +335,10 @@ RectTransform:
   m_Father: {fileID: 4269319188659701825}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -97}
-  m_SizeDelta: {x: 1080, y: 44}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4269319188660028733
 CanvasRenderer:
@@ -463,10 +463,10 @@ RectTransform:
   m_Father: {fileID: 4269319188659701885}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: 0}
-  m_SizeDelta: {x: 0, y: 44}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4269319188660028735
 CanvasRenderer:
@@ -644,8 +644,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -200}
-  m_SizeDelta: {x: -400, y: -600}
+  m_AnchoredPosition: {x: 0, y: -240}
+  m_SizeDelta: {x: -200, y: -520}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4269319188660028675
 CanvasRenderer:
@@ -673,7 +673,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 973656e344a784b428ecb283dad981ff, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2eed527b21b330b4ba216667781f8dc1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -695,15 +695,15 @@ GameObject:
   - component: {fileID: 4269319188665487501}
   - component: {fileID: 4269319188665487503}
   - component: {fileID: 4269319188665487499}
-  - component: {fileID: 4269319189277264786}
   - component: {fileID: 4269319190111774750}
+  - component: {fileID: 929083296}
   m_Layer: 5
   m_Name: TwineTextPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4269319188659701829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -797,7 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99c8fea63e749a74b9ad6e36ead8cfe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Story: {fileID: 4269319189277264786}
+  Story: {fileID: 0}
   Container: {fileID: 4269319188659701825}
   LinkTemplate: {fileID: 4269319188665487489}
   WordTemplate: {fileID: 4269319188665469953}
@@ -805,22 +805,6 @@ MonoBehaviour:
   StartStory: 1
   AutoDisplay: 1
   ShowNamedLinks: 1
---- !u!114 &4269319189277264786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4269319188671548901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3387906ba2ad3f418fdf48e3a0e7f53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AutoPlay: 0
-  StartPassage: Opening cut scene
-  AdditionalCues: []
-  DebugMode: 0
 --- !u!114 &4269319190111774750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -833,7 +817,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07aa9906684307e498e59037b23d93e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  story: {fileID: 4269319189277264786}
+  story: {fileID: 0}
+--- !u!114 &929083296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269319188671548901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff81e399e6f83ed4d9dbe4165aa834c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AutoPlay: 1
+  StartPassage: Entering the Dungeons (Opening cut scene)
+  AdditionalCues: []
+  DebugMode: 0
 --- !u!1 &4269319188671548903
 GameObject:
   m_ObjectHideFlags: 0

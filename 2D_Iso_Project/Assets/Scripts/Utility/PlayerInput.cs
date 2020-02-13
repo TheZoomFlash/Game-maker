@@ -14,10 +14,10 @@ public class PlayerInput : InputComponent//, IDataPersister
     protected bool m_HaveControl = true;
 
     public InputButton Pause = new InputButton(KeyCode.Escape, XboxControllerButtons.Menu);
-    public InputButton Interact = new InputButton(KeyCode.E, XboxControllerButtons.Y);
-    public InputButton MeleeAttack = new InputButton(KeyCode.Mouse0, XboxControllerButtons.A);
-    public InputButton RangedAttack = new InputButton(KeyCode.Mouse1, XboxControllerButtons.B);
-    public InputButton Jump = new InputButton(KeyCode.Space, XboxControllerButtons.X);
+    public InputButton Interact = new InputButton(KeyCode.E, XboxControllerButtons.B);
+    public InputButton MeleeAttack = new InputButton(KeyCode.Mouse0, XboxControllerButtons.X);
+    public InputButton RangedAttack = new InputButton(KeyCode.Mouse1, XboxControllerButtons.Y);
+    public InputButton Jump = new InputButton(KeyCode.Space, XboxControllerButtons.A);
     public InputAxis Horizontal = new InputAxis(KeyCode.D, KeyCode.A, XboxControllerAxes.LeftstickHorizontal);
     public InputAxis Vertical = new InputAxis(KeyCode.W, KeyCode.S, XboxControllerAxes.LeftstickVertical);
     //[HideInInspector]

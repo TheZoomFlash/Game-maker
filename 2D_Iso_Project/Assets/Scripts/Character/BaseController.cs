@@ -103,7 +103,8 @@ public abstract class BaseController<T> : MonoBehaviour
         if (damager.attackDash)
             m_body.ForceMove(dir * damager.attackMoveDis * Mathf.Sqrt(2 * attackIndex));
 
-        if(attackClip.Length > attackIndex - 1 && attackClip[attackIndex - 1])
+        //Debug.Log("attackIndex " + attackIndex);
+        if (attackClip.Length > attackIndex - 1 && attackClip[attackIndex - 1])
             PlaySource(attackClip[attackIndex - 1]);
     }
 

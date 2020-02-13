@@ -36,6 +36,7 @@ public class PlayerController : BaseController<PlayerMove>
     public float attackPressDelay = 0.5f;
     
     const int Attack_Sequence = 4;
+    int baseIndex = 0;
     bool attack_pressDown = false;
     protected Coroutine Cor_DisPress = null;
 
@@ -98,14 +99,15 @@ public class PlayerController : BaseController<PlayerMove>
     {
         yield return new WaitForSeconds(attackPressDelay);
         attack_pressDown = false;
-        attackIndex = 0;
+        baseIndex = 0;
     }
 
     public void CheckForMeleeAttack()
     {
         if (attack_pressDown && damager.IsCanDamage && CanMeleeAttack[shapeIndex])
         {
-            attackIndex = attackIndex % Attack_Sequence + 1;
+            baseIndex = baseIndex % Attack_Sequence + 1;
+            attackIndex = baseIndex;
             MeleeAttackStart();
         }
     }
@@ -141,6 +143,7 @@ public class PlayerController : BaseController<PlayerMove>
     {
         m_animator = ShapeList[shapeIndex].GetComponent<Animator>();
         m_sprite = ShapeList[shapeIndex].GetComponent<SpriteRenderer>();
+        m_sprite.flipX = false;
         SceneLinkedSMB<PlayerController>.Initialise(m_animator, this);
     }
 
@@ -151,6 +154,7 @@ public class PlayerController : BaseController<PlayerMove>
 
         shapeAB.Use();
 
+        m_sprite.flipX = false;
         ShapeList[shapeIndex].SetActive(false);
         shapeIndex = (shapeIndex + 1)% ShapeNumber;
         ShapeList[shapeIndex].SetActive(true);
