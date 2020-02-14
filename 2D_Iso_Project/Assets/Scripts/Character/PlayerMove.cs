@@ -20,7 +20,8 @@ public class PlayerMove : CharacterMove
         dashAB = gameObject.AddComponent<Ability>() as Ability;
         dashAB.InitSetParams(dashDuration, dashInvertal);
 
-        //ghostTrail = GetComponentInChildren<GhostTrail>();
+        if (ghostTrail == null)
+            ghostTrail = FindObjectOfType<GhostTrail>();
     }
 
     protected override void SpeedUpdate(Vector2 movement)

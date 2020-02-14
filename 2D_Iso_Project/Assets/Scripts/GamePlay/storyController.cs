@@ -25,25 +25,26 @@ public class storyController : MonoBehaviour
     }
 
     // Specifies that this method is an Enter cue for the passage named "A large empty yard"
-    [StoryCue("Arrives in first room", "Enter")]
+    [StoryCue("Dungeon - Hallway 1", "Enter")]
     [StoryCue("sword room", "Enter")]
     [StoryCue("hidden area room", "Enter")]
     void enter_FirstRoom()
     {
-        Debug.Log("Enter :" + story.CurrentPassage.Name);
+        //Debug.Log("Enter :" + story.CurrentPassage.Name);
         GameManager.Instance.TurnStory();
     }
 
     public void GoNext()
     {
         //Debug.Log("GoNext");
-        IEnumerable<StoryLink> links = story.GetCurrentLinks();
-        var emtor = links.GetEnumerator();
-        if (emtor.MoveNext())
-        {
-            //Debug.Log("DoLink : " + emtor.Current.Name);
-            story.DoLink(emtor.Current);
-        }
+        //IEnumerable<StoryLink> links = story.GetCurrentLinks();
+        //var emtor = links.GetEnumerator();
+        //if (emtor.MoveNext())
+        //{
+        //    //Debug.Log("DoLink : " + emtor.Current.Name);
+        //    story.DoLink(emtor.Current);
+        //}
+        GameManager.Instance.TurnStory();
     }
 
     //void story_OnOutput(StoryOutput output)

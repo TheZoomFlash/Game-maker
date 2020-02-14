@@ -104,7 +104,7 @@ public abstract class BaseController<T> : MonoBehaviour
             m_body.ForceMove(dir * damager.attackMoveDis * Mathf.Sqrt(2 * attackIndex));
 
         //Debug.Log("attackIndex " + attackIndex);
-        if (attackClip.Length > attackIndex - 1 && attackClip[attackIndex - 1])
+        if (attackIndex != 0 && attackClip.Length > attackIndex - 1)
             PlaySource(attackClip[attackIndex - 1]);
     }
 
@@ -115,8 +115,7 @@ public abstract class BaseController<T> : MonoBehaviour
     protected virtual void HitStart()
     {
         m_animator.SetTrigger(hash_hit);
-        if(hitClip)
-            PlaySource(hitClip);
+        PlaySource(hitClip);
     }
 
 
@@ -171,8 +170,7 @@ public abstract class BaseController<T> : MonoBehaviour
     protected virtual void DieStart()
     {
         m_animator.SetTrigger(hash_dead);
-        if(dieClip)
-            PlaySource(dieClip);
+        PlaySource(dieClip);
     }
 
     public void Die(Damager Damager, Damageable Damageable)
@@ -191,24 +189,22 @@ public abstract class BaseController<T> : MonoBehaviour
     protected void PlaySource(AudioClip clip)
     {
         //audioSource.loop = false;
-        audioSource.PlayOneShot(clip);
+        if(clip)
+            audioSource.PlayOneShot(clip);
     }
 
-    protected void PlayLoopSource(AudioClip clip, bool isPlay)
+    protected void PlayEffect(ParticleSystem particle)
     {
-        if(isPlay)
+        particle.gameObject.SetActive(true);
+        if (particle && !particle.isPlaying)
+            particle.Play();
+    }
+
+    protected void CloseEffect(ParticleSystem particle)
+    {
+        if (particle)
         {
-            if(!audioSource.isPlaying)
-            {
-                audioSource.clip = clip;
-                audioSource.loop = true;
-                audioSource.Play();
-            }
+            particle.gameObject.SetActive(false);
         }
-        else
-        {
-            audioSource.Stop();
-        }
-        //audioSource.PlayScheduled(0.1f);
     }
 }

@@ -18,6 +18,7 @@ public class CharacterMove : MonoBehaviour
     protected Vector2 m_PreviousPosition;
     protected Vector2 m_CurrentPosition;
     protected Vector2 m_NextMovement;
+    protected Vector2 m_ForceMovement;
 
     public bool isMovable = true;
     public void EnableMove() => isMovable = true;
@@ -32,6 +33,7 @@ public class CharacterMove : MonoBehaviour
         Velocity = 0;
         FaceDir = new Vector2(0, -1);
         m_NextMovement = Vector2.zero;
+        m_ForceMovement = Vector2.zero;
     }
 
     void Awake()
@@ -53,12 +55,12 @@ public class CharacterMove : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (m_NextMovement == Vector2.zero)
+        if (m_NextMovement == Vector2.zero && m_ForceMovement == Vector2.zero)
             return;
 
         m_PreviousPosition = Rigidbody2D.position;
-        m_CurrentPosition = m_PreviousPosition + m_NextMovement;
-        m_NextMovement = Vector2.zero;
+        m_CurrentPosition = m_PreviousPosition + m_NextMovement + m_ForceMovement;
+        m_NextMovement = m_ForceMovement = Vector2.zero;
 
         Rigidbody2D.MovePosition(m_CurrentPosition);
     }
@@ -72,9 +74,8 @@ public class CharacterMove : MonoBehaviour
     public void Move(Vector2 movement)
     {
         if (!isMovable)
-            return;
-        //movement = Vector2.zero;
-            
+            movement = Vector2.zero;
+
         SetFaceDir(movement);
         SpeedUpdate(movement);
 
@@ -85,7 +86,7 @@ public class CharacterMove : MonoBehaviour
     // don't change FaceDir and Speed
     public void ForceMove(Vector2 movement)
     {
-        m_NextMovement = movement;
+        m_ForceMovement = movement;
     }
 
 

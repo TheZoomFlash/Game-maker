@@ -12,6 +12,14 @@ public class PlayerController : BaseController<PlayerMove>
     public AudioClip footStepClip;
     public AudioClip dashClip;
     public AudioClip shapeClip;
+    public AudioSource loopSource;
+
+    //****************** Particle
+    [Space]
+    [Header("Particle Setting")]
+    public ParticleSystem runParticle;
+    public ParticleSystem dashParticle;
+    public ParticleSystem skillParticle;
 
     //****************** script
     CameraShaker m_shaker;
@@ -63,16 +71,21 @@ public class PlayerController : BaseController<PlayerMove>
     {
         ProcessInput();
         base.OnFixedUpdate();
-        //if (m_body.Velocity > 1)
-        //{
-        //    if (footStepClip)
-        //        PlayLoopSource(footStepClip, true);
-        //}
-        //else
-        //    PlayLoopSource(footStepClip, false);
     }
 
     void ProcessInput()
+    {
+        ProcessMove();
+
+        if (PlayerInput.Instance.MeleeAttack.Down)
+            PressedAttack();
+
+        if (PlayerInput.Instance.Interact.Down)
+            ShapeChange();
+    }
+
+
+    void ProcessMove()
     {
         float horizontal = PlayerInput.Instance.Horizontal.Value;
         float Vertical = PlayerInput.Instance.Vertical.Value;
@@ -81,18 +94,25 @@ public class PlayerController : BaseController<PlayerMove>
             Dash();
 
         m_body.Move(movement);
-
-        if (PlayerInput.Instance.MeleeAttack.Down)
+        if(m_body.Velocity == m_body.moveSpeed)
         {
-            attack_pressDown = true;
-            if (Cor_DisPress != null)
-                StopCoroutine(Cor_DisPress);
-            Cor_DisPress = StartCoroutine(DisPressAfterDelay());
+            PlayEffect(runParticle);
+            PlayLoopSource(footStepClip, true);
         }
+        else
+        {
+            CloseEffect(runParticle);
+            PlayLoopSource(footStepClip, false);
+        }
+    }
 
-        if (PlayerInput.Instance.Interact.Down)
-            ShapeChange();
 
+    void PressedAttack()
+    {
+        attack_pressDown = true;
+        if (Cor_DisPress != null)
+            StopCoroutine(Cor_DisPress);
+        Cor_DisPress = StartCoroutine(DisPressAfterDelay());
     }
 
     IEnumerator DisPressAfterDelay()
@@ -124,6 +144,7 @@ public class PlayerController : BaseController<PlayerMove>
 
         MeleeAttack(dir);
         m_shaker.Shake();
+        PlayEffect(skillParticle);
         //FindObjectOfType<CameraShaker>().Shake();
     }
 
@@ -134,8 +155,8 @@ public class PlayerController : BaseController<PlayerMove>
             return;
 
         m_body.Dash();
-        if (dashClip)
-            PlaySource(dashClip);
+        PlaySource(dashClip);
+        PlayEffect(dashParticle);
     }
 
 
@@ -160,8 +181,7 @@ public class PlayerController : BaseController<PlayerMove>
         ShapeList[shapeIndex].SetActive(true);
         ShapeInit();
 
-        if (shapeClip)
-            PlaySource(shapeClip);
+        PlaySource(shapeClip);
         FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }
 
@@ -181,6 +201,24 @@ public class PlayerController : BaseController<PlayerMove>
     }
 
 
+    protected void PlayLoopSource(AudioClip clip, bool isPlay)
+    {
+        if (loopSource == null)
+            return;
+
+        if (isPlay)
+        {
+            if (!loopSource.isPlaying)
+            {
+                loopSource.clip = clip;
+                loopSource.Play();
+            }
+        }
+        else
+        {
+            loopSource.Stop();
+        }
+    }
 
 
 

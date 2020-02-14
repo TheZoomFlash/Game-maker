@@ -73,7 +73,6 @@ public class GameManager : MonoBehaviour
 
     void StoryMoveOn()
     {
-        // Input.GetMouseButtonDown(0)
         if (isStory)
         {
             if(PlayerInput.Instance.inputType == PlayerInput.InputType.MouseAndKeyboard)
