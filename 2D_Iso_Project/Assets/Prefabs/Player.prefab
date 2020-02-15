@@ -186,7 +186,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 4a37b230cfc05a840a2c94d73f26bbe6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f0ca3022cb53b24f94cac1a32484fce, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -318,14 +318,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackClip:
-  - {fileID: 8300000, guid: 5dafcb157659d7447832e7a68101c994, type: 3}
+  - {fileID: 8300000, guid: c316def286d98894bb97d719963f1be5, type: 3}
   - {fileID: 8300000, guid: c316def286d98894bb97d719963f1be5, type: 3}
   - {fileID: 8300000, guid: 55be85ad0e6e1f04aa86e6c2ef90d3e0, type: 3}
   - {fileID: 8300000, guid: b7ae2e839c0830440989c71037b756ff, type: 3}
   hitClip: {fileID: 0}
   dieClip: {fileID: 0}
   m_sprite: {fileID: 0}
-  footStepClip: {fileID: 8300000, guid: 3ffae1f0cf11d82458aca879d0a19739, type: 3}
+  footStepClip: {fileID: 8300000, guid: 1c3e8f09ccfe41743a0c7eb6ef3639bc, type: 3}
   dashClip: {fileID: 8300000, guid: 5dafcb157659d7447832e7a68101c994, type: 3}
   shapeClip: {fileID: 0}
   loopSource: {fileID: 314802093}
@@ -406,6 +406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  accelerate: 0.2
   isMovable: 1
   m_layerMask:
     serializedVersion: 2
