@@ -136,11 +136,11 @@ public class PlayerController : BaseController<PlayerMove>
     public void MeleeAttack()
     {
         Vector2 dir = m_body.FaceDir;
-        //if (PlayerInput.Instance.inputType == PlayerInput.InputType.MouseAndKeyboard)
-        //{
-        //    Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        //    dir = (mousePos - (Vector2)m_body.Position).normalized;
-        //}    
+        if (PlayerInput.Instance.inputType == PlayerInput.InputType.MouseAndKeyboard)
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            dir = (mousePos - (Vector2)m_body.Position).normalized;
+        }
 
         MeleeAttack(dir);
         m_shaker.Shake();
@@ -189,15 +189,13 @@ public class PlayerController : BaseController<PlayerMove>
 
     public bool GetHealth(int healthAmount)
     {
-        return true;
-        //TODO:
-        //if (damageable.NeedHealth)
-        //{
-        //    damageable.GainHealth(healthAmount);
-        //    return true;
-        //}
-        //else
-        //    return false;
+        if (damageable.NeedHealth)
+        {
+            damageable.GainHealth(healthAmount);
+            return true;
+        }
+        else
+            return false;
     }
 
 

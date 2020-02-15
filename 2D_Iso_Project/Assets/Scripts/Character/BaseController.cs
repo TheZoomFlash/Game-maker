@@ -60,7 +60,7 @@ public abstract class BaseController<T> : MonoBehaviour
         damageable = GetComponent<Damageable>();
         audioSource = GetComponent<AudioSource>();
 
-        damageable.OnTakeDamage.AddListener(Hit);
+        damageable.OnHit.AddListener(Hit);
         damageable.OnDie.AddListener(Die);
     }
 

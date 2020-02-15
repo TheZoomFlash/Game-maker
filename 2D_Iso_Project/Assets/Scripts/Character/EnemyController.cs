@@ -42,7 +42,10 @@ public class EnemyController : BaseController<CharacterMove>
 
     [Header("Range Attack Data")]
     [Tooltip("From where the projectile are spawned")]
-    public Transform shootingOrigin;
+    public GameObject attackPre;
+    public void ShowAttention(bool b) { if (attackPre) attackPre.SetActive(b); }
+
+    //public Transform shootingOrigin;
     protected Vector3 m_TargetShootPosition;
 
     public LayerMask obstacleLay;

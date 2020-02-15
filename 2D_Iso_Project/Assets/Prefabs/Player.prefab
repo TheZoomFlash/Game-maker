@@ -375,6 +375,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f2661bc6796d0242b9f3bc49dfb2845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
+  IsBarLengthChange: 0
   maxHealeh: 5
   isBeatBack: 0
   DamageBackDis: 3
@@ -384,13 +386,16 @@ MonoBehaviour:
   OnHealthSet:
     m_PersistentCalls:
       m_Calls: []
-  OnTakeDamage:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDie:
+  OnMaxHealthSet:
     m_PersistentCalls:
       m_Calls: []
   OnGainHealth:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDie:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4202685836496692877

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class Damageable : MonoBehaviour
 {
     [Serializable]
-    public class HealthEvent : UnityEvent<Damageable>
+    public class HealthEvent : UnityEvent<int>
     { }
 
     [Serializable]
@@ -15,6 +15,8 @@ public class Damageable : MonoBehaviour
     [Serializable]
     public class HealEvent : UnityEvent<int, Damageable>
     { }
+
+    public HealthBar healthBar;
 
     public int maxHealeh = 5;
     protected int m_CurrentHealth;
@@ -46,13 +48,26 @@ public class Damageable : MonoBehaviour
 
     //[HideInInspector]
     public HealthEvent OnHealthSet;
-    public DamageEvent OnTakeDamage;
-    public DamageEvent OnDie;
+    public HealthEvent OnMaxHealthSet;
     public HealEvent OnGainHealth;
+    public DamageEvent OnHit;
+    public DamageEvent OnDie;
 
-    void Awake()
+    private void Awake()
     {
-        SetHealth(maxHealeh);
+        if (healthBar == null)
+            healthBar = GetComponentInChildren<HealthBar>();
+
+        if(healthBar)
+        {
+            OnHealthSet.AddListener(healthBar.SetHealth);
+            OnMaxHealthSet.AddListener(healthBar.SetMaxHealth);
+        }
+    }
+
+    void Start()
+    {
+        SetMaxHealth();
     }
 
     void FixedUpdate()
@@ -85,15 +100,21 @@ public class Damageable : MonoBehaviour
         //m_DamageDirection = transform.position + (Vector3)centreOffset - Damager.transform.position;
 
         if (IsAlive)
-            OnTakeDamage.Invoke(Damager, this);
+            OnHit.Invoke(Damager, this);
         else
             OnDie.Invoke(Damager, this);
+    }
+
+    private void SetMaxHealth()
+    {
+        m_CurrentHealth = maxHealeh;
+        OnMaxHealthSet.Invoke(maxHealeh);
     }
 
     private void SetHealth(int amount)
     {
         m_CurrentHealth = Mathf.Clamp(amount, 0, maxHealeh);
-        OnHealthSet.Invoke(this);
+        OnHealthSet.Invoke(amount);
 
         CheckDie();
     }
