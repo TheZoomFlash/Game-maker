@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 
 [RequireComponent(typeof(Damager))]
@@ -166,6 +167,10 @@ public abstract class BaseController<T> : MonoBehaviour
     public void Stun(Damager Damager, Damageable Damageable)
     {
         m_animator.SetTrigger(hash_stun);
+        GameObject particle = Resources.Load("GoopStreamEffect") as GameObject;
+        GameObject obj = Instantiate(particle, Damageable.transform.position, Quaternion.identity);
+        obj.transform.DOJump(Damager.transform.position, 2, 1, 0.5f);
+        //Debug.Log("s " + Damageable.transform.position + ", d " + Damager.transform.position);
     }
 
 
