@@ -9,7 +9,7 @@ public class CharacterMove : MonoBehaviour
 {
     [Header("move settings")]
     public float moveSpeed = 3f;
-    public float accelerate = 0.2f;
+    public float accelerate = 0.8f;
 
     public Rigidbody2D Rigidbody2D { get; protected set; }
     public Vector2 Position { get { return Rigidbody2D.position; } }
@@ -112,10 +112,7 @@ public class CharacterMove : MonoBehaviour
     protected virtual void SpeedUpdate(Vector2 movement)
     {
         float addV = Mathf.Clamp(movement.magnitude, 0, 1);
-        if (addV == 0)
-            Velocity = 0;
-        else
-            Velocity = Mathf.Clamp(Velocity + addV * accelerate, 0, moveSpeed);
+        Velocity = Mathf.Clamp(Velocity + addV - accelerate, 0, moveSpeed);
     }
 
     /// <summary>
