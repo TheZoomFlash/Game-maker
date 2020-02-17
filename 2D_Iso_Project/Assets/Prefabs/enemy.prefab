@@ -535,8 +535,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b0b6690bbb89414e8626673b4c5a571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 3
   accelerate: 0.5
+  brakeAcc: 0.2
   isMovable: 1
   m_layerMask:
     serializedVersion: 2

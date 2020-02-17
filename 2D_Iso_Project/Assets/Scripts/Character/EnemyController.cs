@@ -59,7 +59,6 @@ public class EnemyController : BaseController<CharacterMove>
     //static Collider2D[] s_ColliderCache = new Collider2D[16];
 
 
-
     //****************** animator
     protected readonly int m_HashSpottedPara = Animator.StringToHash("Spotted");
     protected readonly int m_HashShootingPara = Animator.StringToHash("Shooting");
@@ -216,7 +215,7 @@ public class EnemyController : BaseController<CharacterMove>
         if(CheckForMeleeAttack())
         {
             attackIndex = 1;
-            MeleeAttackStart();
+            MeleeAttackAnim();
         }
         else
         {

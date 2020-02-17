@@ -21,10 +21,6 @@ public class PlayerController : BaseController<PlayerMove>
     public ParticleSystem dashParticle;
     public ParticleSystem skillParticle;
 
-    //****************** script
-    CameraShaker m_shaker;
-
-
     //****************** Shape
     [Header("Shape Setting")]
     public GameObject[] ShapeList;
@@ -41,12 +37,32 @@ public class PlayerController : BaseController<PlayerMove>
 
     //****************** meleeAttack
     [Header("meleeAttack Setting")]
-    public float attackPressDelay = 0.5f;
+    public float attackPressDelay = 0.3f;
     
     const int Attack_Sequence = 4;
     int baseIndex = 0;
     bool attack_pressDown = false;
     protected Coroutine Cor_DisPress = null;
+
+
+    //****************** Blood
+    [Header("Blood Setting")]
+    public HealthBar bloodBar;
+    public IntBar blood;
+    public int maxBlood = 100;
+    public int DrainbloodCost = 20;
+    public int DrainbloodRecover = 5;
+
+
+    //****************** drainBlood
+    [Header("drainBlood Setting")]
+    public Damager drainSkill;
+    public float drainDuration = 0.5f;
+    public float drainInterval = 1.0f;
+    Ability drainAB;
+
+    //****************** script
+    CameraShaker m_shaker;
 
 
     protected override void OnAwake()
@@ -59,11 +75,19 @@ public class PlayerController : BaseController<PlayerMove>
         shapeAB = gameObject.AddComponent<Ability>() as Ability;
         shapeAB.InitSetParams(shapeDuration, shapeInterval);
         ShapeNumber = ShapeList.Length;
+
+        drainAB = gameObject.AddComponent<Ability>() as Ability;
+        drainAB.InitSetParams(drainDuration, drainInterval);
     }
 
     void Start()
     {
         ShapeInit();
+        blood = new IntBar(maxBlood);
+        if (bloodBar)
+        {
+            bloodBar.SetMaxHealth(maxBlood);
+        }
     }
 
 
@@ -80,8 +104,8 @@ public class PlayerController : BaseController<PlayerMove>
         if (PlayerInput.Instance.MeleeAttack.Down)
             PressedAttack();
 
-        if (PlayerInput.Instance.Interact.Down)
-            ShapeChange();
+        //if (PlayerInput.Instance.Interact.Down)
+        //    ShapeChange();
     }
 
 
@@ -128,7 +152,7 @@ public class PlayerController : BaseController<PlayerMove>
         {
             baseIndex = baseIndex % Attack_Sequence + 1;
             attackIndex = baseIndex;
-            MeleeAttackStart();
+            MeleeAttackAnim();
         }
     }
 
@@ -144,8 +168,31 @@ public class PlayerController : BaseController<PlayerMove>
 
         MeleeAttack(dir);
         m_shaker.Shake();
-        PlayEffect(skillParticle);
         //FindObjectOfType<CameraShaker>().Shake();
+    }
+
+
+    public void CheckForDrainBlood()
+    {
+        if (PlayerInput.Instance.RangedAttack.Down)
+            DrainBlood();
+    }
+
+    public void DrainBlood()
+    {
+        if (!drainAB.Usable || !blood.IsCanCast(DrainbloodCost))
+            return;
+
+        drainAB.Use();
+
+        m_animator.SetTrigger(hash_drain);
+        int count = drainSkill.Attack(m_body.FaceDir, true);
+        blood.ChangeValue(count * DrainbloodRecover - DrainbloodCost);
+        bloodBar.SetHealth(blood.CurrentValue);
+        //PlaySource();
+        PlayEffect(skillParticle);
+        m_shaker.Shake();
+        GameManager.Instance.StartVib(0.3f);
     }
 
 

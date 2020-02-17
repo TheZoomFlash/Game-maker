@@ -17,13 +17,11 @@ public class Damageable : MonoBehaviour
     { }
 
     public HealthBar healthBar;
-
-    public int maxHealeh = 5;
-    protected int m_CurrentHealth;
-    public int CurrentHealth { get { return m_CurrentHealth; } }
-    public bool IsAlive => m_CurrentHealth > 0;
-    public bool IsDead => !IsAlive;
-    public bool NeedHealth => m_CurrentHealth < maxHealeh;
+    protected IntBar health;
+    public int maxHealeh = 100;
+    public bool IsAlive => !health.IsEmpty;
+    public bool IsDead => health.IsEmpty;
+    public bool NeedHealth => !health.IsFull;
 
     protected Vector2 m_DamageDirection;
     public Vector2 DamageDirection { get { return m_DamageDirection; } }
@@ -51,6 +49,7 @@ public class Damageable : MonoBehaviour
     public HealthEvent OnMaxHealthSet;
     public HealEvent OnGainHealth;
     public DamageEvent OnHit;
+    public DamageEvent OnStun;
     public DamageEvent OnDie;
 
     private void Awake()
@@ -84,7 +83,7 @@ public class Damageable : MonoBehaviour
     }
 
 
-    public void TakeDamage(Damager Damager, bool ignoreInvincible = false)
+    public void TakeDamage(Damager Damager, bool ignoreInvincible = false, bool isStun = false)
     {
         //Debug.Log(transform.name + " TakeDamage");
         if (IsDead || (m_Invulnerable && !ignoreInvincible))
@@ -94,34 +93,37 @@ public class Damageable : MonoBehaviour
         //We still want the callback that we were hit, but not the damage to be removed from health.
         if (!m_Invulnerable)
         {
-            SetHealth(m_CurrentHealth - Damager.damage);
+            SetHealth(health.CurrentValue - Damager.damage);
+
+            if (IsAlive)
+            {
+                if (isStun)
+                    OnStun.Invoke(Damager, this);
+                else
+                    OnHit.Invoke(Damager, this);
+            }       
+            else
+                OnDie.Invoke(Damager, this);
         }
 
         //m_DamageDirection = transform.position + (Vector3)centreOffset - Damager.transform.position;
-
-        if (IsAlive)
-            OnHit.Invoke(Damager, this);
-        else
-            OnDie.Invoke(Damager, this);
     }
 
     private void SetMaxHealth()
     {
-        m_CurrentHealth = maxHealeh;
+        health = new IntBar(maxHealeh);
         OnMaxHealthSet.Invoke(maxHealeh);
     }
 
     private void SetHealth(int amount)
     {
-        m_CurrentHealth = Mathf.Clamp(amount, 0, maxHealeh);
+        health.SetValue(amount);
         OnHealthSet.Invoke(amount);
-
-        CheckDie();
     }
 
     public void GainHealth(int amount)
     {
-        SetHealth(m_CurrentHealth + amount);
+        SetHealth(health.CurrentValue + amount);
         OnGainHealth.Invoke(amount, this);
     }
 

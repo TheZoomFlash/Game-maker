@@ -75,35 +75,36 @@ public class Damager : MonoBehaviour
         }
     }
 
-    public void Attack(Vector2 dir)
+    public int Attack(Vector2 dir, bool stun = false)
     {
         if (!IsCanDamage || nextDamageTimer > 0)
-            return;
+            return 0;
 
         nextDamageTimer = damageRate;
 
         Vector2 scale = m_DamagerTransform.lossyScale;
         Vector2 facingOffset = Vector2.Scale(offset * dir, scale);
-        Vector2 scaledSize = Vector2.Scale(size * dir, scale);
+        Vector2 scaledSize = Vector2.Scale(size, scale);
 
         Vector2 pointA = (Vector2)m_DamagerTransform.position + facingOffset - scaledSize * 0.5f;
         Vector2 pointB = pointA + scaledSize;
         int hitCount = Physics2D.OverlapArea(pointA, pointB, m_AttackContactFilter, m_AttackOverlapResults);
-
-        //Debug.Log("Damage : " + dir + " , hitCount : " + hitCount);
+        //Debug.Log("Damage : " + pointA + pointB + " , hitCount : " + hitCount);
         for (int i = 0; i < hitCount; i++)
         {
             m_LastHit = m_AttackOverlapResults[i];
             Damageable damageable = m_LastHit.GetComponentInParent<Damageable>();
             if (damageable)
             {
-                damageable.TakeDamage(this, ignoreInvincibility);
+                damageable.TakeDamage(this, ignoreInvincibility, stun);
                 //OnDamageableHit.Invoke(this, damageable);
                 //if (disableDamageAfterHit)
                 //    DisableDamage();
             }
         }
+
         //OnNonDamageableHit.Invoke(this);
+        return hitCount;
     }
 
 #if UNITY_EDITOR
@@ -113,7 +114,7 @@ public class Damager : MonoBehaviour
         Vector3 _offset = offset * dir;
         Vector3 _center = transform.position + _offset;
 
-        Handles.color = new Color(1.0f, 0, 0, 0.2f);
+        Handles.color = new Color(1.0f, 0, 0, 0.5f);
         Handles.DrawWireCube(_center, size);
 
         //Draw attack range

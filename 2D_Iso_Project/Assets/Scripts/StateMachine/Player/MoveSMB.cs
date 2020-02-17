@@ -12,6 +12,7 @@ public class MoveSMB : SceneLinkedSMB<PlayerController>
         if (m_MonoBehaviour)
         {
             m_MonoBehaviour.CheckForMeleeAttack();
+            m_MonoBehaviour.CheckForDrainBlood();
         }
     }
 

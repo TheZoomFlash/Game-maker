@@ -20,8 +20,10 @@ public abstract class BaseController<T> : MonoBehaviour
     protected readonly int hash_yDir = Animator.StringToHash("yDir");
     protected readonly int hash_velocity = Animator.StringToHash("velocity");
     protected readonly int hash_attack = Animator.StringToHash("meleeAttack");
+    protected readonly int hash_drain = Animator.StringToHash("drainBlood");
     protected readonly int hash_hit = Animator.StringToHash("hit");
     protected readonly int hash_dead = Animator.StringToHash("dead");
+    protected readonly int hash_stun = Animator.StringToHash("stun");
 
 
     //****************** Audios
@@ -61,6 +63,7 @@ public abstract class BaseController<T> : MonoBehaviour
 
         damageable.OnHit.AddListener(Hit);
         damageable.OnDie.AddListener(Die);
+        damageable.OnStun.AddListener(Stun);
     }
 
 
@@ -88,7 +91,7 @@ public abstract class BaseController<T> : MonoBehaviour
     }
 
 
-    protected virtual void MeleeAttackStart()
+    protected virtual void MeleeAttackAnim()
     {
         m_animator.SetInteger(hash_attack, attackIndex);
     }
@@ -109,15 +112,6 @@ public abstract class BaseController<T> : MonoBehaviour
 
 
 
-
-
-    protected virtual void HitStart()
-    {
-        m_animator.SetTrigger(hash_hit);
-        PlaySource(hitClip);
-    }
-
-
     public virtual void Hit(Damager Damager, Damageable Damageable)
     {
         Vector2 DamagerDir = transform.position - Damager.transform.position;
@@ -125,10 +119,11 @@ public abstract class BaseController<T> : MonoBehaviour
         if (Damageable.isBeatBack)
             m_body.ForceMove(DamagerDir.normalized * Damageable.DamageBackDis);
 
-        HitStart();
+        m_animator.SetTrigger(hash_hit);
+        PlaySource(hitClip);
+        GameManager.Instance.StartVib(0.2f);
 
         StartFlick(Damageable.invulnerabilityDuration);
-        GameManager.Instance.StartVib(0.2f);
     }
 
     protected void StartFlick(float invulnerabilityDuration = 0.5f)
@@ -168,20 +163,19 @@ public abstract class BaseController<T> : MonoBehaviour
     }
 
 
+    public void Stun(Damager Damager, Damageable Damageable)
+    {
+        m_animator.SetTrigger(hash_stun);
+    }
 
 
-
-    protected virtual void DieStart()
+    public virtual void Die(Damager Damager, Damageable Damageable)
     {
         m_animator.SetTrigger(hash_dead);
         PlaySource(dieClip);
-    }
-
-    public void Die(Damager Damager, Damageable Damageable)
-    {
-        DieStart();
         GameManager.Instance.StartVib(0.4f);
     }
+
 
     // real dead
     public virtual void RealDie()

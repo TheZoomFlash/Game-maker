@@ -12,7 +12,6 @@ public class MeleeAttackSMB : SceneLinkedSMB<PlayerController>
     public override void OnSLStatePostEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_MonoBehaviour.MeleeAttack();
-        
     }
 
     public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
