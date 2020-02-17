@@ -445,8 +445,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 10
+  m_Mass: 10
+  m_LinearDrag: 100
   m_AngularDrag: 1
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -478,7 +478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 0}
-  maxHealeh: 100
+  maxHealeh: 4
   isBeatBack: 1
   DamageBackDis: 1
   invulnerableAfterDamage: 1
@@ -591,11 +591,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UIBar
-      objectReference: {fileID: 0}
-    - target: {fileID: 6917505226826728685, guid: dfbe2b313e401dc49aabdb1364e216e9,
-        type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6917505226826728685, guid: dfbe2b313e401dc49aabdb1364e216e9,
         type: 3}

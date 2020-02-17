@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -126,13 +125,18 @@ public abstract class BaseController<T> : MonoBehaviour
         if (Damageable.isBeatBack)
             m_body.ForceMove(DamagerDir.normalized * Damageable.DamageBackDis);
 
-        if (m_FlickeringCoroutine != null)
-            StopCoroutine(m_FlickeringCoroutine);
-        m_FlickeringCoroutine = StartCoroutine(Flicker(Damageable.invulnerabilityDuration));
-
         HitStart();
+
+        StartFlick(Damageable.invulnerabilityDuration);
+        GameManager.Instance.StartVib(0.2f);
     }
 
+    protected void StartFlick(float invulnerabilityDuration = 0.5f)
+    {
+        if (m_FlickeringCoroutine != null)
+            StopCoroutine(m_FlickeringCoroutine);
+        m_FlickeringCoroutine = StartCoroutine(Flicker(invulnerabilityDuration));
+    }
 
     protected IEnumerator Flicker(float duration)
     {
@@ -176,6 +180,7 @@ public abstract class BaseController<T> : MonoBehaviour
     public void Die(Damager Damager, Damageable Damageable)
     {
         DieStart();
+        GameManager.Instance.StartVib(0.4f);
     }
 
     // real dead

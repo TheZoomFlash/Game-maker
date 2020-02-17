@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XInputDotNetPure;
 
 public class GameManager : MonoBehaviour
 {
@@ -146,5 +147,28 @@ public class GameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(fadeTime);
         TurnStory();
+    }
+
+
+
+    PlayerIndex _type = PlayerIndex.One;
+    const float LeftMotorRange = 1f;
+    const float RightMotorRange = 0.5f;
+    const float DurationTime = 0.15f;
+    Coroutine cor_vib = null;
+
+    public void StartVib(float duration)
+    {
+        if (cor_vib != null)
+            StopCoroutine(cor_vib);
+
+        cor_vib = StartCoroutine(SetVibration(duration));
+    }
+
+    public IEnumerator SetVibration(float duration = DurationTime)
+    {
+        GamePad.SetVibration(_type, LeftMotorRange, RightMotorRange);
+        yield return new WaitForSeconds(duration);
+        GamePad.SetVibration(_type, 0, 0);
     }
 }

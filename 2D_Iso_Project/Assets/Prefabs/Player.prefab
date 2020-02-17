@@ -376,7 +376,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 0}
-  IsBarLengthChange: 0
   maxHealeh: 5
   isBeatBack: 0
   DamageBackDis: 3

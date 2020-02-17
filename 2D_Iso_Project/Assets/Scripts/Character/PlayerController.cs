@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 
 
 [RequireComponent(typeof(PlayerMove))]
@@ -149,6 +149,7 @@ public class PlayerController : BaseController<PlayerMove>
     }
 
 
+
     public void Dash()
     {
         if (!m_body.isDashUsable)
@@ -176,12 +177,14 @@ public class PlayerController : BaseController<PlayerMove>
         shapeAB.Use();
 
         m_sprite.flipX = false;
+        m_sprite.color = Color.white;
         ShapeList[shapeIndex].SetActive(false);
         shapeIndex = (shapeIndex + 1)% ShapeNumber;
         ShapeList[shapeIndex].SetActive(true);
         ShapeInit();
 
         PlaySource(shapeClip);
+        GameManager.Instance.StartVib(0.1f);
         FindObjectOfType<RippleEffect>().Emit(Camera.main.WorldToViewportPoint(transform.position));
     }
 
