@@ -364,8 +364,8 @@ MonoBehaviour:
   attackDash: 1
   attackMoveDis: 0.3
   damageRange: 1.5
-  offset: 0.75
-  size: {x: 1.5, y: 1.5}
+  angle: 150
+  size: {x: 2, y: 2}
   canHitTriggers: 0
   hittableLayers:
     serializedVersion: 2
@@ -388,7 +388,7 @@ MonoBehaviour:
   isBeatBack: 0
   DamageBackDis: 3
   invulnerableAfterDamage: 1
-  invulnerabilityDuration: 3
+  invulnerabilityDuration: 2
   centreOffset: {x: 0, y: 1}
   OnHealthSet:
     m_PersistentCalls:
@@ -654,8 +654,8 @@ MonoBehaviour:
   attackDash: 0
   attackMoveDis: 0.3
   damageRange: 1.5
-  offset: 1.5
-  size: {x: 3, y: 2}
+  angle: 150
+  size: {x: 4, y: 3}
   canHitTriggers: 0
   hittableLayers:
     serializedVersion: 2
@@ -947,6 +947,11 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7171282264348029949, guid: af9ed8fd03c9ee247a1dca358fae04aa,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7171282264348029949, guid: af9ed8fd03c9ee247a1dca358fae04aa,
         type: 3}

@@ -481,7 +481,7 @@ MonoBehaviour:
   maxHealeh: 100
   isBeatBack: 1
   DamageBackDis: 0.5
-  invulnerableAfterDamage: 1
+  invulnerableAfterDamage: 0
   invulnerabilityDuration: 0.4
   centreOffset: {x: 0, y: 1}
   OnHealthSet:

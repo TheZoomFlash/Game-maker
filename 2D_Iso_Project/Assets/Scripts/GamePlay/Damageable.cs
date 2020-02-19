@@ -29,7 +29,7 @@ public class Damageable : MonoBehaviour
     public float DamageBackDis = 1f;
 
     public bool invulnerableAfterDamage = true;
-    public float invulnerabilityDuration = 1f;
+    public float invulnerabilityDuration = 0.5f;
     protected float m_InulnerabilityTimer;
     protected bool m_Invulnerable = false;
     public void DisableInvulnerability() => m_Invulnerable = false;
@@ -57,7 +57,7 @@ public class Damageable : MonoBehaviour
         if (healthBar == null)
             healthBar = GetComponentInChildren<HealthBar>();
 
-        if(healthBar)
+        if (healthBar)
         {
             OnHealthSet.AddListener(healthBar.SetHealth);
             OnMaxHealthSet.AddListener(healthBar.SetMaxHealth);
@@ -86,26 +86,25 @@ public class Damageable : MonoBehaviour
     public void TakeDamage(Damager Damager, bool ignoreInvincible = false, bool isStun = false)
     {
         //Debug.Log(transform.name + " TakeDamage");
-        if (IsDead || (m_Invulnerable && !ignoreInvincible))
+        if (IsDead || (m_Invulnerable && !ignoreInvincible) )
             return;
 
         //we can reach that point if the Damager was one that was ignoring invincible state.
         //We still want the callback that we were hit, but not the damage to be removed from health.
-        if (!m_Invulnerable)
+        SetHealth(health.CurrentValue - Damager.damage);
+
+        if (IsAlive)
         {
-            SetHealth(health.CurrentValue - Damager.damage);
-
-            if (IsAlive)
-            {
-                if (isStun)
-                    OnStun.Invoke(Damager, this);
-                else
-                    OnHit.Invoke(Damager, this);
-            }       
+            if (isStun)
+                OnStun.Invoke(Damager, this);
             else
-                OnDie.Invoke(Damager, this);
-        }
+                OnHit.Invoke(Damager, this);
 
+            if (invulnerableAfterDamage)
+                EnableInvulnerability();
+        }       
+        else
+            OnDie.Invoke(Damager, this);
         //m_DamageDirection = transform.position + (Vector3)centreOffset - Damager.transform.position;
     }
 
