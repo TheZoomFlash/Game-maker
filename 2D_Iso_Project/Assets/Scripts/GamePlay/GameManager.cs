@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
     const float DurationTime = 0.15f;
     Coroutine cor_vib = null;
 
-    public void StartVib(float duration)
+    public void StartVib(float duration = 0.15f)
     {
         if (cor_vib != null)
             StopCoroutine(cor_vib);

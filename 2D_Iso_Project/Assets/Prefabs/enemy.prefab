@@ -478,9 +478,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 0}
-  maxHealeh: 4
+  maxHealeh: 100
   isBeatBack: 1
-  DamageBackDis: 1
+  DamageBackDis: 0.5
   invulnerableAfterDamage: 1
   invulnerabilityDuration: 0.4
   centreOffset: {x: 0, y: 1}
@@ -494,6 +494,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnHit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStun:
     m_PersistentCalls:
       m_Calls: []
   OnDie:
@@ -516,7 +519,7 @@ MonoBehaviour:
   attackDash: 0
   attackMoveDis: 0.3
   damageRange: 1
-  offset: 0.75
+  angle: 0
   size: {x: 1.5, y: 1}
   canHitTriggers: 0
   hittableLayers:

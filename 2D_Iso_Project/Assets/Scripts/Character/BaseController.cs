@@ -122,7 +122,7 @@ public abstract class BaseController<T> : MonoBehaviour
 
         m_animator.SetTrigger(hash_hit);
         PlaySource(hitClip);
-        GameManager.Instance.StartVib(0.2f);
+        GameManager.Instance.StartVib();
 
         StartFlick(Damageable.invulnerabilityDuration);
     }
@@ -178,7 +178,7 @@ public abstract class BaseController<T> : MonoBehaviour
     {
         m_animator.SetTrigger(hash_dead);
         PlaySource(dieClip);
-        GameManager.Instance.StartVib(0.4f);
+        GameManager.Instance.StartVib(0.3f);
     }
 
 

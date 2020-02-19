@@ -27,7 +27,7 @@ public class Damager : MonoBehaviour
 
     // range
     public float damageRange = 1.0f;
-    public float offset = 0.75f;
+    public float angle = 0;
     public Vector2 size = new Vector2(1.5f, 1.0f);
 
     //[Tooltip("SpriteRenderer used to read the flipX value used by offset Based OnSprite Facing")]
@@ -48,7 +48,7 @@ public class Damager : MonoBehaviour
 
     protected ContactFilter2D m_AttackContactFilter;
     protected Collider2D[] m_AttackOverlapResults = new Collider2D[10];
-    protected Transform m_DamagerTransform;
+    protected Vector2 m_DamagerTransform;
 
     //call that from inside the onDamagerHIt or OnNonDamagerHit to get what was hit.
     protected Collider2D m_LastHit;
@@ -62,8 +62,6 @@ public class Damager : MonoBehaviour
         m_AttackContactFilter.layerMask = hittableLayers;
         m_AttackContactFilter.useLayerMask = true;
         m_AttackContactFilter.useTriggers = canHitTriggers;
-
-        m_DamagerTransform = transform;
     }
 
     void FixedUpdate()
@@ -81,15 +79,14 @@ public class Damager : MonoBehaviour
             return 0;
 
         nextDamageTimer = damageRate;
+        //Vector2 scale = m_DamagerTransform.lossyScale;
+        //Vector2 scaledSize = Vector2.Scale(size, scale);
 
-        Vector2 scale = m_DamagerTransform.lossyScale;
-        Vector2 facingOffset = Vector2.Scale(offset * dir, scale);
-        Vector2 scaledSize = Vector2.Scale(size, scale);
-
-        Vector2 pointA = (Vector2)m_DamagerTransform.position + facingOffset - scaledSize * 0.5f;
-        Vector2 pointB = pointA + scaledSize;
-        int hitCount = Physics2D.OverlapArea(pointA, pointB, m_AttackContactFilter, m_AttackOverlapResults);
-        //Debug.Log("Damage : " + pointA + pointB + " , hitCount : " + hitCount);
+        m_DamagerTransform = (Vector2)transform.position + size / 2 * dir;
+        angle = Vector2.SignedAngle(Vector2.right, dir);
+        int hitCount = Physics2D.OverlapCapsule(m_DamagerTransform,
+            size, CapsuleDirection2D.Horizontal, angle, m_AttackContactFilter, m_AttackOverlapResults);
+        //Debug.Log("Damage : " + m_DamagerTransform + "; angle" + angle + " , hitCount : " + hitCount);
         for (int i = 0; i < hitCount; i++)
         {
             m_LastHit = m_AttackOverlapResults[i];
@@ -103,6 +100,12 @@ public class Damager : MonoBehaviour
             }
         }
 
+        if(stun)
+        {
+            GameObject particle = Resources.Load("RisingSteam") as GameObject;
+            GameObject obj = Instantiate(particle, m_DamagerTransform, Quaternion.identity);
+        }
+
         //OnNonDamageableHit.Invoke(this);
         return hitCount;
     }
@@ -110,9 +113,8 @@ public class Damager : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        Vector3 dir = new Vector3(1.0f, 0, 0);
-        Vector3 _offset = offset * dir;
-        Vector3 _center = transform.position + _offset;
+        Vector2 dir = size / 2 * new Vector2(1.0f, 0.0f);
+        Vector3 _center = new Vector3(transform.position.x+ dir.x, transform.position.y + dir.y, 0);
 
         Handles.color = new Color(1.0f, 0, 0, 0.5f);
         Handles.DrawWireCube(_center, size);
