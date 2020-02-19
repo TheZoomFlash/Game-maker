@@ -100,7 +100,7 @@ public abstract class BaseController<T> : MonoBehaviour
 
     public void MeleeAttack(Vector2 dir)
     {
-        damager.Attack(dir);
+        damager.AttackDir(dir);
         m_body.SetFaceDir(dir);
 
         if (damager.attackDash)

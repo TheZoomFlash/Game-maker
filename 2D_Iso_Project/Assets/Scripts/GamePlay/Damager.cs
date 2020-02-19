@@ -27,8 +27,8 @@ public class Damager : MonoBehaviour
 
     // range
     public float damageRange = 1.0f;
-    public float angle = 0;
     public Vector2 size = new Vector2(1.5f, 1.0f);
+    float angle = 0;
 
     //[Tooltip("SpriteRenderer used to read the flipX value used by offset Based OnSprite Facing")]
     //public SpriteRenderer spriteRenderer;
@@ -73,19 +73,44 @@ public class Damager : MonoBehaviour
         }
     }
 
-    public int Attack(Vector2 dir, bool stun = false)
+    public int AttackDir(Vector2 dir)
     {
         if (!IsCanDamage || nextDamageTimer > 0)
             return 0;
-
         nextDamageTimer = damageRate;
-        //Vector2 scale = m_DamagerTransform.lossyScale;
-        //Vector2 scaledSize = Vector2.Scale(size, scale);
 
         m_DamagerTransform = (Vector2)transform.position + size / 2 * dir;
         angle = Vector2.SignedAngle(Vector2.right, dir);
         int hitCount = Physics2D.OverlapCapsule(m_DamagerTransform,
             size, CapsuleDirection2D.Horizontal, angle, m_AttackContactFilter, m_AttackOverlapResults);
+        //Debug.Log("Damage : " + m_DamagerTransform + "; angle" + angle + " , hitCount : " + hitCount);
+        for (int i = 0; i < hitCount; i++)
+        {
+            m_LastHit = m_AttackOverlapResults[i];
+            Damageable damageable = m_LastHit.GetComponentInParent<Damageable>();
+            if (damageable)
+            {
+                damageable.TakeDamage(this, ignoreInvincibility);
+                //OnDamageableHit.Invoke(this, damageable);
+                //if (disableDamageAfterHit)
+                //    DisableDamage();
+            }
+        }
+
+        //OnNonDamageableHit.Invoke(this);
+        return hitCount;
+    }
+
+    public int AttackAround(bool stun = false)
+    {
+        if (!IsCanDamage || nextDamageTimer > 0)
+            return 0;
+
+        nextDamageTimer = damageRate;
+
+        m_DamagerTransform = (Vector2)transform.position;
+        int hitCount = Physics2D.OverlapCircle(m_DamagerTransform, damageRange, 
+            m_AttackContactFilter, m_AttackOverlapResults);
         //Debug.Log("Damage : " + m_DamagerTransform + "; angle" + angle + " , hitCount : " + hitCount);
         for (int i = 0; i < hitCount; i++)
         {
@@ -100,11 +125,9 @@ public class Damager : MonoBehaviour
             }
         }
 
-        if(stun)
-        {
-            GameObject particle = Resources.Load("RisingSteam") as GameObject;
-            GameObject obj = Instantiate(particle, m_DamagerTransform, Quaternion.identity);
-        }
+
+        GameObject particle = Resources.Load("RisingSteam") as GameObject;
+        GameObject obj = Instantiate(particle, m_DamagerTransform, Quaternion.identity);
 
         //OnNonDamageableHit.Invoke(this);
         return hitCount;

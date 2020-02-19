@@ -186,7 +186,7 @@ public class PlayerController : BaseController<PlayerMove>
         drainAB.Use();
 
         m_animator.SetTrigger(hash_drain);
-        int count = drainSkill.Attack(m_body.FaceDir, true);
+        int count = drainSkill.AttackAround(true);
         blood.ChangeValue(count * DrainbloodRecover - DrainbloodCost);
         bloodBar.SetHealth(blood.CurrentValue);
         //PlaySource();
