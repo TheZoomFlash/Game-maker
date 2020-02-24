@@ -102,9 +102,9 @@ public class Damageable : MonoBehaviour
 
             if (invulnerableAfterDamage)
                 EnableInvulnerability();
-        }       
-        else
-            OnDie.Invoke(Damager, this);
+        }
+
+        CheckDie();
         //m_DamageDirection = transform.position + (Vector3)centreOffset - Damager.transform.position;
     }
 

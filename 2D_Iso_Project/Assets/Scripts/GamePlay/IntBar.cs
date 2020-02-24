@@ -15,7 +15,7 @@ public class IntBar
 
     public void SetValue(int v)
     {
-        CurrentValue = v;
+        CurrentValue = Mathf.Clamp(v, 0, maxValue);
     }
 
     public void ChangeValue(int v)

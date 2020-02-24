@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (Input.GetKeyDown(KeyCode.JoystickButton0))
+                if (Input.GetKeyDown(KeyCode.JoystickButton0) || Input.GetKeyDown(KeyCode.JoystickButton2))
                     storyController.Instance.GoNext();
             }
         }
