@@ -20,6 +20,7 @@ public class Level_Transition : MonoBehaviour
         if (layers.Contains(collision.gameObject))
         {
             isStaying = true;
+            PlayerController.PlayerInstance.TeleTrans();
         }
     }
 
@@ -28,6 +29,7 @@ public class Level_Transition : MonoBehaviour
         if (layers.Contains(collision.gameObject))
         {
             isStaying = false;
+            PlayerController.PlayerInstance.CancelTeleTrans();
         }
     }
 

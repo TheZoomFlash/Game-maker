@@ -20,6 +20,7 @@ public class PlayerController : BaseController<PlayerMove>
     public ParticleSystem runParticle;
     public ParticleSystem dashParticle;
     public ParticleSystem skillParticle;
+    public ParticleSystem transParticle;
 
     //****************** Shape
     [Header("Shape Setting")]
@@ -239,13 +240,25 @@ public class PlayerController : BaseController<PlayerMove>
 
     public bool GetHealth(int healthAmount)
     {
-        if (damageable.NeedHealth)
-        {
-            damageable.GainHealth(healthAmount);
-            return true;
-        }
-        else
-            return false;
+        damageable.GainHealth(healthAmount);
+        return true;
+        //if (damageable.NeedHealth)
+        //{
+        //    damageable.GainHealth(healthAmount);
+        //    return true;
+        //}
+        //else
+        //    return false;
+    }
+
+    public void TeleTrans()
+    {
+        PlayEffect(transParticle);
+    }
+
+    public void CancelTeleTrans()
+    {
+        CloseEffect(transParticle);
     }
 
 
