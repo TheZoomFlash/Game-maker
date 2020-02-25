@@ -98,9 +98,9 @@ public abstract class BaseController<T> : MonoBehaviour
     }
 
 
-    public void MeleeAttack(Vector2 dir)
+    public int MeleeAttack(Vector2 dir)
     {
-        damager.AttackDir(dir);
+        int num = damager.AttackDir(dir);
         m_body.SetFaceDir(dir);
 
         if (damager.attackDash)
@@ -109,6 +109,8 @@ public abstract class BaseController<T> : MonoBehaviour
         //Debug.Log("attackIndex " + attackIndex);
         if (attackIndex != 0 && attackClip.Length > attackIndex - 1)
             PlaySource(attackClip[attackIndex - 1]);
+
+        return num;
     }
 
 

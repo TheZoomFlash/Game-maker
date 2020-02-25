@@ -167,9 +167,9 @@ public class PlayerController : BaseController<PlayerMove>
             dir = (mousePos - (Vector2)m_body.Position).normalized;
         }
 
-        MeleeAttack(dir);
+        int num = MeleeAttack(dir);
         m_shaker.Shake();
-        //FindObjectOfType<CameraShaker>().Shake();
+        GameManager.Instance.AddCombo(num);
     }
 
 
@@ -194,6 +194,8 @@ public class PlayerController : BaseController<PlayerMove>
         PlayEffect(skillParticle);
         m_shaker.Shake();
         GameManager.Instance.StartVib(0.3f);
+
+        GameManager.Instance.AddCombo(count);
     }
 
 
