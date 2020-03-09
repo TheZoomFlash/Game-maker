@@ -38,6 +38,8 @@ public abstract class BaseController<T> : MonoBehaviour
     //[Tooltip("Time in seconds during which the enemy flicker after being hit")]
     [HideInInspector]
     public SpriteRenderer m_sprite;
+    [HideInInspector]
+    public Collider2D m_collider;
     protected float flickerDeltaTime = 0.1f;
     protected Coroutine m_FlickeringCoroutine = null;
     protected Color m_OriginalColor;

@@ -207,14 +207,24 @@ public class PlayerController : BaseController<PlayerMove>
             return;
 
         m_body.Dash();
+        m_collider.enabled = false;
+        StartCoroutine(EnableCollider());
+
         PlaySource(dashClip);
         PlayEffect(dashParticle);
+    }
+
+    IEnumerator EnableCollider()
+    {
+        yield return new WaitForSeconds(m_body.dashDuration);
+        m_collider.enabled = true;
     }
 
 
     public void ShapeInit()
     {
         m_animator = ShapeList[shapeIndex].GetComponent<Animator>();
+        m_collider = ShapeList[shapeIndex].GetComponent<Collider2D>();
         m_sprite = ShapeList[shapeIndex].GetComponent<SpriteRenderer>();
         m_sprite.flipX = false;
         SceneLinkedSMB<PlayerController>.Initialise(m_animator, this);
