@@ -207,7 +207,7 @@ public class PlayerController : BaseController<PlayerMove>
             return;
 
         m_body.Dash();
-        m_collider.enabled = false;
+        m_collider.enabled = true;
         StartCoroutine(EnableCollider());
 
         PlaySource(dashClip);
