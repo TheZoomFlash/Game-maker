@@ -791,7 +791,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 429180bffb25cf642b93e989585a8490, type: 2}
+    m_Motion: {fileID: 7400000, guid: 5821f52a7ecd4d648826011e9869e58c, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 1}
     m_TimeScale: 1
@@ -799,7 +799,7 @@ BlendTree:
     m_DirectBlendParameter: xDir
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 8dc0400eecce33f40a360030bd459fd5, type: 2}
+    m_Motion: {fileID: 7400000, guid: ff0cb38acf093624787e4d4a436b380d, type: 2}
     m_Threshold: 0.14285715
     m_Position: {x: 0.7, y: 0.7}
     m_TimeScale: 1
@@ -807,7 +807,7 @@ BlendTree:
     m_DirectBlendParameter: xDir
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 30c43bfdf8540c2448ef8ffe661c8f93, type: 2}
+    m_Motion: {fileID: 7400000, guid: a1da9479b4cb9ba42bdd501889c83863, type: 2}
     m_Threshold: 0.2857143
     m_Position: {x: 1, y: 0}
     m_TimeScale: 1
@@ -815,7 +815,7 @@ BlendTree:
     m_DirectBlendParameter: xDir
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 11ca87184c581b84786db817986b0d4a, type: 2}
+    m_Motion: {fileID: 7400000, guid: b8cd53ed831c03642be416b668d5c7b5, type: 2}
     m_Threshold: 0.42857143
     m_Position: {x: 0.7, y: -0.7}
     m_TimeScale: 1
@@ -823,7 +823,7 @@ BlendTree:
     m_DirectBlendParameter: xDir
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 45b0343d7c3e4b74a8b7a96e92775b1a, type: 2}
+    m_Motion: {fileID: 7400000, guid: 1effd44b49a17474e96798ee487d57bf, type: 2}
     m_Threshold: 0.5714286
     m_Position: {x: 0, y: -1}
     m_TimeScale: 1
@@ -831,7 +831,7 @@ BlendTree:
     m_DirectBlendParameter: xDir
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 90f180fb5b02c1c468b5e1d7a1804e95, type: 2}
+    m_Motion: {fileID: 7400000, guid: 912d30f9592289c4abb2b1bba11ab57a, type: 2}
     m_Threshold: 0.71428573
     m_Position: {x: -0.7, y: -0.7}
     m_TimeScale: 1
@@ -839,7 +839,7 @@ BlendTree:
     m_DirectBlendParameter: xDir
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: e794bafb28f76434b92e7ed20354db6c, type: 2}
+    m_Motion: {fileID: 7400000, guid: 994fa26308a91584cbe719762c321bad, type: 2}
     m_Threshold: 0.85714287
     m_Position: {x: -1, y: 0}
     m_TimeScale: 1
@@ -847,7 +847,7 @@ BlendTree:
     m_DirectBlendParameter: xDir
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 6a9d73136903ebd4ba7856e013c92009, type: 2}
+    m_Motion: {fileID: 7400000, guid: f9214e8b75a3d44409ce16c2408a92e7, type: 2}
     m_Threshold: 1
     m_Position: {x: -0.7, y: 0.7}
     m_TimeScale: 1
@@ -2374,6 +2374,32 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1102 &1102000374004788892
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_W
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 994fa26308a91584cbe719762c321bad, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &1102118411430772160
 AnimatorState:
   serializedVersion: 5
@@ -2397,6 +2423,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 206221870875032732}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &1102140528114624572
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_E
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: a1da9479b4cb9ba42bdd501889c83863, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -2454,6 +2506,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &1102190741402511568
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_NE
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: ff0cb38acf093624787e4d4a436b380d, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &1102195478932684254
 AnimatorState:
   serializedVersion: 5
@@ -2475,6 +2553,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 206177472064864894}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &1102209987043740748
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_SE
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: b8cd53ed831c03642be416b668d5c7b5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -2618,6 +2722,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &1102284175921580788
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_SW
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 912d30f9592289c4abb2b1bba11ab57a, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &1102323359642500274
 AnimatorState:
   serializedVersion: 5
@@ -2754,6 +2884,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &1102590729957751882
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_NW
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: f9214e8b75a3d44409ce16c2408a92e7, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &1102595084670894952
 AnimatorState:
   serializedVersion: 5
@@ -2865,6 +3021,32 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &1102686032081001734
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_N
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 5821f52a7ecd4d648826011e9869e58c, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &1102803620057380122
 AnimatorState:
   serializedVersion: 5
@@ -2888,6 +3070,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 206625657105605354}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &1102825226917862626
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Alucard_Blooddrain_S
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 1effd44b49a17474e96798ee487d57bf, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -3034,6 +3242,30 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 1102252236775361980}
     m_Position: {x: 156, y: 432, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102686032081001734}
+    m_Position: {x: 191, y: 497, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102140528114624572}
+    m_Position: {x: 226, y: 562, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102000374004788892}
+    m_Position: {x: 261, y: 627, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102825226917862626}
+    m_Position: {x: 296, y: 692, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102190741402511568}
+    m_Position: {x: 331, y: 757, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102590729957751882}
+    m_Position: {x: 366, y: 822, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102284175921580788}
+    m_Position: {x: 401, y: 887, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102209987043740748}
+    m_Position: {x: 436, y: 952, z: 0}
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 1107958197624631464}
@@ -3055,12 +3287,12 @@ AnimatorStateMachine:
   m_EntryTransitions:
   - {fileID: 1109870590378174138}
   m_StateMachineTransitions:
-  - first: {fileID: 1107631194711980534}
-    second:
-    - {fileID: 1109280694644375732}
   - first: {fileID: 1107958197624631464}
     second:
     - {fileID: 1109793111159381118}
+  - first: {fileID: 1107631194711980534}
+    second:
+    - {fileID: 1109280694644375732}
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 396, y: 216, z: 0}
   m_EntryPosition: {x: 648, y: 60, z: 0}
